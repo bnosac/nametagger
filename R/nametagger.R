@@ -265,7 +265,7 @@ nametagger <- function(x.train,
 #' opts                            *
 #' opts <- nametagger_options(
 #'   lemma_capitalised = list(window = 3),
-#'   brown = list(file = "path/to/brown/clusters/file.txt")
+#'   brown = list(file = "path/to/brown/clusters/file.txt"),
 #'   gazetteers = list(file_loc = "path/to/txt/file1.txt", 
 #'                     file_time = "path/to/txt/file2.txt"))
 #' opts
