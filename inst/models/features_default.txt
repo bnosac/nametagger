@@ -1,0 +1,7 @@
+# Sentence processors
+Form/2
+Lemma/2
+RawLemma/2
+RawLemmaCapitalization/2
+Tag/2
+NumericTimeValue/1

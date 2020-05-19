@@ -1,0 +1,21 @@
+Package: nametagger
+Type: Package
+Title: Named Entity Recognition in Texts using NameTag
+Version: 0.1.0
+Authors@R: c(
+    person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jwijffels@bnosac.be'), 
+    person('BNOSAC', role = 'cph'), 
+    person("Institute of Formal and Applied Linguistics, Faculty of Mathematics and Physics, Charles University in Prague, Czech Republic", role = 'cph'), 
+    person('Milan Straka', role = c('ctb', 'cph'), email = 'straka@ufal.mff.cuni.cz'), 
+    person('Jana Straková', role = c('ctb', 'cph'), email = 'strakova@ufal.mff.cuni.cz'))
+Maintainer: Jan Wijffels <jwijffels@bnosac.be>
+Description: Wraps the 'nametag' library <https://github.com/ufal/nametag>, allowing users to find and extract entities (names, persons, locations, addresses, ...) in raw text and build your own entity recognition models.
+    Based on a Maximum Entropy Markov Model which is described in <http://ufal.mff.cuni.cz/~straka/papers/2013-tsd_ner.pdf>.
+URL: https://github.com/bnosac/nametagger
+License: MPL-2.0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
+Imports: Rcpp (>= 0.11.5), udpipe (>= 0.8.1), utils
+Suggests: crfsuite
+LinkingTo: Rcpp

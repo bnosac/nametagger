@@ -1,0 +1,89 @@
+CXX_STD = CXX11
+PKG_CPPFLAGS = -DSTRICT_R_HEADERS -I./nametag/src
+
+SOURCES_NAMETAG = nametag/src/bilou/bilou_probabilities.cpp \
+          nametag/src/bilou/ner_sentence.cpp \
+          nametag/src/classifier/network_classifier.cpp \
+          nametag/src/classifier/network_classifier_encoder.cpp \
+          nametag/src/features/feature_processor.cpp \
+          nametag/src/features/feature_processor_instances.cpp \
+          nametag/src/features/feature_templates.cpp \
+          nametag/src/features/feature_templates_encoder.cpp \
+          nametag/src/morphodita/derivator/derivation_formatter.cpp \
+          nametag/src/morphodita/derivator/derivator_dictionary.cpp \
+          nametag/src/morphodita/derivator/derivator_dictionary_encoder.cpp \
+          nametag/src/morphodita/morpho/czech_morpho.cpp \
+          nametag/src/morphodita/morpho/czech_morpho_encoder.cpp \
+          nametag/src/morphodita/morpho/english_morpho.cpp \
+          nametag/src/morphodita/morpho/english_morpho_encoder.cpp \
+          nametag/src/morphodita/morpho/english_morpho_guesser.cpp \
+          nametag/src/morphodita/morpho/english_morpho_guesser_encoder.cpp \
+          nametag/src/morphodita/morpho/external_morpho.cpp \
+          nametag/src/morphodita/morpho/external_morpho_encoder.cpp \
+          nametag/src/morphodita/morpho/generic_morpho.cpp \
+          nametag/src/morphodita/morpho/generic_morpho_encoder.cpp \
+          nametag/src/morphodita/morpho/morpho.cpp \
+          nametag/src/morphodita/morpho/morpho_prefix_guesser_encoder.cpp \
+          nametag/src/morphodita/morpho/morpho_statistical_guesser.cpp \
+          nametag/src/morphodita/morpho/morpho_statistical_guesser_encoder.cpp \
+          nametag/src/morphodita/morpho/morpho_statistical_guesser_trainer.cpp \
+          nametag/src/morphodita/morpho/raw_morpho_dictionary_reader.cpp \
+          nametag/src/morphodita/morpho/tag_filter.cpp \
+          nametag/src/morphodita/tagger/tagger.cpp \
+          nametag/src/morphodita/tagset_converter/identity_tagset_converter.cpp \
+          nametag/src/morphodita/tagset_converter/pdt_to_conll2009_tagset_converter.cpp \
+          nametag/src/morphodita/tagset_converter/strip_lemma_comment_tagset_converter.cpp \
+          nametag/src/morphodita/tagset_converter/strip_lemma_id_tagset_converter.cpp \
+          nametag/src/morphodita/tagset_converter/tagset_converter.cpp \
+          nametag/src/morphodita/tokenizer/czech_tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/english_tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/generic_tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/generic_tokenizer_factory.cpp \
+          nametag/src/morphodita/tokenizer/generic_tokenizer_factory_encoder.cpp \
+          nametag/src/morphodita/tokenizer/gru_tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/gru_tokenizer_factory.cpp \
+          nametag/src/morphodita/tokenizer/gru_tokenizer_network.cpp \
+          nametag/src/morphodita/tokenizer/gru_tokenizer_trainer.cpp \
+          nametag/src/morphodita/tokenizer/ragel_tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/tokenizer_factory.cpp \
+          nametag/src/morphodita/tokenizer/unicode_tokenizer.cpp \
+          nametag/src/morphodita/tokenizer/vertical_tokenizer.cpp \
+          nametag/src/morphodita/version/version.cpp \
+          nametag/src/ner/bilou_ner.cpp \
+          nametag/src/ner/bilou_ner_trainer.cpp \
+          nametag/src/ner/entity_map.cpp \
+          nametag/src/ner/entity_map_encoder.cpp \
+          nametag/src/ner/ner.cpp \
+          nametag/src/tagger/external_tagger.cpp \
+          nametag/src/tagger/morphodita_tagger.cpp \
+          nametag/src/tagger/tagger.cpp \
+          nametag/src/tagger/trivial_tagger.cpp \
+          nametag/src/tokenizer/morphodita_tokenizer_wrapper.cpp \
+          nametag/src/tokenizer/tokenizer.cpp \
+          nametag/src/unilib/unicode.cpp \
+          nametag/src/unilib/uninorms.cpp \
+          nametag/src/unilib/unistrip.cpp \
+          nametag/src/unilib/utf16.cpp \
+          nametag/src/unilib/utf8.cpp \
+          nametag/src/unilib/version.cpp \
+          nametag/src/utils/compressor_load.cpp \
+          nametag/src/utils/compressor_save.cpp \
+          nametag/src/utils/options.cpp \
+          nametag/src/utils/url_detector.cpp \
+          nametag/src/version/version.cpp
+          
+SOURCES_NAMETAGGER = rcpp_nametag.cpp  \
+          RcppExports.cpp
+          
+SOURCES = $(SOURCES_NAMETAG) $(SOURCES_NAMETAGGER)
+
+OBJECTS_NAMETAG     = $(SOURCES_NAMETAG:.cpp=.o)
+OBJECTS_NAMETAGGER  = $(SOURCES_NAMETAGGER:.cpp=.o)
+OBJECTS = $(SOURCES:.cpp=.o)
+
+
+.PHONY: all
+
+#all: $(SHLIB); rm -f $(OBJECTS_NAMETAGGER)
+all: $(SHLIB); rm -f $(OBJECTS)
