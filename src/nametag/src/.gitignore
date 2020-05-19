@@ -1,0 +1,6 @@
+/.build/
+/rest_server/nametag_server
+run_ner
+run_tokenizer
+train_ner
+libnametag.a
