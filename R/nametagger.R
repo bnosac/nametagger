@@ -261,20 +261,23 @@ nametagger <- function(x.train,
 #' opts
 #' opts <- nametagger_options(time = list(use = TRUE, window = 3),
 #'                            token_capitalised = list(use = TRUE, window = 1),
-#'                            ner_previous = list(use = TRUE, window = 1))
-#' opts                            *
+#'                            ner_previous = list(use = TRUE, window = 5))
+#' opts                            
 #' opts <- nametagger_options(
 #'   lemma_capitalised = list(window = 3),
-#'   brown = list(file = "path/to/brown/clusters/file.txt"),
-#'   gazetteers = list(file_loc = "path/to/txt/file1.txt", 
+#'   brown = list(window = 1, file = "path/to/brown/clusters/file.txt"),
+#'   gazetteers = list(window = 1, 
+#'                     file_loc = "path/to/txt/file1.txt", 
 #'                     file_time = "path/to/txt/file2.txt"))
 #' opts
 #' opts <- nametagger_options(
 #'   lemma_capitalised = list(window = 3),
-#'   brown = list(file = "path/to/brown/clusters/file.txt"),
+#'   brown = list(window = 2, 
+#'                file = "path/to/brown/clusters/file.txt"),
 #'   gazetteers_enhanced = list(
-#'     type_loc  = "form", save_loc  = "embed_in_model", file_loc  = "path/to/txt/loc.txt", entity_loc  = "LOC", 
-#'     type_time = "form", save_time = "embed_in_model", file_time = "path/to/txt/loc.txt", entity_time = "TIME"))
+#'     loc  = "LOC",  type_loc  = "form", save_loc  = "embed_in_model", file_loc  = "pathto/loc.txt",  
+#'     time = "TIME", type_time = "form", save_time = "embed_in_model", file_time = "pathto/time.txt")
+#'     )
 #' opts
 nametagger_options <- function(file = "nametagger.ner", 
                                type = c("generic", "english", "czech"),
@@ -291,8 +294,8 @@ nametagger_options <- function(file = "nametagger.ner",
                                time = list(use = FALSE, window = 0),
                                url_email = list(use = FALSE, url = "URL", email = "EMAIL"),
                                ner_previous = list(use = FALSE, window = 0),
-                               brown = list(use = FALSE),
-                               gazetteers = list(use = FALSE),
+                               brown = list(use = FALSE, window = 0),
+                               gazetteers = list(use = FALSE, window = 0),
                                gazetteers_enhanced = list(use = FALSE)){
   type <- match.arg(type)
   tagger <- match.arg(tagger)
