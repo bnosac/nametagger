@@ -55,13 +55,13 @@ Train a Named Entity Recognition Model using NameTag
 \examples{
 data(europeananews)
 x <- subset(europeananews, doc_id \%in\% "enp_NL.kb.bio")
-traindata <- subset(x, sentence_id >  20)
-testdata  <- subset(x, sentence_id <= 20)
+traindata <- subset(x, sentence_id >  100)
+testdata  <- subset(x, sentence_id <= 100)
 path <- "nametagger-nl.ner" 
 \dontshow{
 path <- tempfile("nametagger-nl_", fileext = ".net")
-traindata <- subset(x, sentence_id >  20 & sentence_id < 40)
-testdata  <- subset(x, sentence_id <= 20)
+traindata <- subset(x, sentence_id >  100 & sentence_id < 300)
+testdata  <- subset(x, sentence_id <= 100)
 } 
 opts <- nametagger_options(file = path,
                            token = list(window = 2),
