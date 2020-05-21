@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -308,12 +309,12 @@ bool gru_tokenizer_network_trainer<D>::train(unsigned url_email_tokenizer, unsig
       learning_rate = exp(((epochs - epoch - 2) * log(learning_rate_initial) + (epoch + 1) * log(learning_rate_final)) / (epochs - 1));
 
     // Evaluate
-    cerr << "Epoch " << epoch+1 << ", logprob: " << scientific << setprecision(4) << logprob
+    Rcpp::Rcout << "Epoch " << epoch+1 << ", logprob: " << scientific << setprecision(4) << logprob
          << ", training acc: " << fixed << setprecision(2) << 100. * correct / double(total) << "%";
     if (!heldout.empty()) {
       f1_info tokens, sentences;
       evaluate(url_email_tokenizer, segment, allow_spaces, heldout, tokens, sentences);
-      cerr << ", heldout tokens: " << 100. * tokens.precision << "%P/" << 100. * tokens.recall << "%R/"
+      Rcpp::Rcout << ", heldout tokens: " << 100. * tokens.precision << "%P/" << 100. * tokens.recall << "%R/"
            << 100. * tokens.f1 << "%, sentences: " << 100. * sentences.precision << "%P/"
            << 100. * sentences.recall << "%R/" << 100. * sentences.f1 << "%";
 
@@ -323,16 +324,16 @@ bool gru_tokenizer_network_trainer<D>::train(unsigned url_email_tokenizer, unsig
         best_combined_f1_network = *this;
       }
       if (early_stopping && best_combined_f1 && epoch - best_combined_f1_epoch > 30) {
-        cerr << endl << "Stopping after 30 iterations of not improving sum of sentence and token f1." << endl;
+        Rcpp::Rcout << endl << "Stopping after 30 iterations of not improving sum of sentence and token f1." << endl;
         break;
       }
     }
-    cerr << endl;
+    Rcpp::Rcout << endl;
   }
 
   // Choose best network if desired
   if (early_stopping && best_combined_f1) {
-    cerr << "Choosing parameters from epoch " << best_combined_f1_epoch+1 << "." << endl;
+    Rcpp::Rcout << "Choosing parameters from epoch " << best_combined_f1_epoch+1 << "." << endl;
     this->embeddings = best_combined_f1_network.embeddings;
     this->gru_fwd = best_combined_f1_network.gru_fwd;
     this->gru_bwd = best_combined_f1_network.gru_bwd;

@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
@@ -149,7 +150,7 @@ void dictionary<LemmaAddinfo>::load(istream& is, int max_suffix_len) {
     sort(forms.begin(), forms.end());
     auto forms_end = unique(forms.begin(), forms.end());
     if (forms_end != forms.end()) {
-      cerr << "Warning: repeated form-tag in lemma " << lemma << '.' << endl;
+      Rcpp::Rcout << "Warning: repeated form-tag in lemma " << lemma << '.' << endl;
       forms.erase(forms_end, forms.end());
     }
 
@@ -170,7 +171,7 @@ void dictionary<LemmaAddinfo>::load(istream& is, int max_suffix_len) {
       // Find forms of the class being added.
       auto start = forms.begin();
       while (start != forms.end() && start->first.compare(0, prefix.size(), prefix) != 0) start++;
-      if (start == forms.end()) runtime_failure("Internal error when generating classes, cannot find prefix '" << prefix << "'!");
+      if (start == forms.end()) runtime_failure("Internal error when generating classes, cannot find prefix '" + prefix + "'!");
       auto end = start;
       while (end != forms.end() && end->first.compare(0, prefix.size(), prefix) == 0) end++;
 

@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
@@ -21,15 +22,15 @@ namespace morphodita {
 void english_morpho_encoder::encode(istream& dictionary, int max_suffix_len, istream& guesser, istream& negations, ostream& out) {
   binary_encoder enc;
 
-  cerr << "Encoding dictionary." << endl;
+  Rcpp::Rcout << "Encoding dictionary." << endl;
   morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, max_suffix_len, enc);
 
-  cerr << "Encoding guesser." << endl;
+  Rcpp::Rcout << "Encoding guesser." << endl;
   english_morpho_guesser_encoder::encode(guesser, negations, enc);
 
-  cerr << "Compressing dictionary." << endl;
+  Rcpp::Rcout << "Compressing dictionary." << endl;
   if (!compressor::save(out, enc)) runtime_failure("Cannot compress and write dictionary to file!");
-  cerr << "Dictionary saved." << endl;
+  Rcpp::Rcout << "Dictionary saved." << endl;
 }
 
 } // namespace morphodita

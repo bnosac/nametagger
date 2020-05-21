@@ -31,8 +31,8 @@ void morpho_statistical_guesser_trainer::train(istream& is, unsigned suffix_len,
     if (line.empty()) continue;
 
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_failure("The guesser training line '" << line << "' does not contain three columns!");
-    if (tokens[0].empty() || tokens[1].empty() || tokens[2].empty()) runtime_failure("The guesser training line '" << line << "' contains an empty column!");
+    if (tokens.size() != 3) runtime_failure("The guesser training line '" + line + "' does not contain three columns!");
+    if (tokens[0].empty() || tokens[1].empty() || tokens[2].empty()) runtime_failure("The guesser training line '" + line + "' contains an empty column!");
 
     // Normalize case
     casing form_case = get_casing(tokens[0], false);

@@ -19,19 +19,19 @@ bool raw_morpho_dictionary_reader::next_lemma(string& lemma, vector<pair<string,
     if (!getline(in, line))
       return false;
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_failure("Line " << line << " does not have three columns!");
+    if (tokens.size() != 3) runtime_failure("Line " + line + " does not have three columns!");
   }
 
   lemma = tokens[0];
   if (seen_lemmas.count(lemma))
-    runtime_failure("Raw morphological dictionary contains lemma '" << lemma << "' multiple times - all forms of one lemma must be in continuous region!");
+    runtime_failure("Raw morphological dictionary contains lemma '" + lemma + "' multiple times - all forms of one lemma must be in continuous region!");
   seen_lemmas.insert(lemma);
 
   tagged_forms.clear();
   tagged_forms.emplace_back(tokens[2], tokens[1]);
   while (getline(in, line)) {
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_failure("Line " << line << " does not have three columns!");
+    if (tokens.size() != 3) runtime_failure("Line " + line + " does not have three columns!");
 
     if (lemma != tokens[0]) break;
     tagged_forms.emplace_back(tokens[2], tokens[1]);

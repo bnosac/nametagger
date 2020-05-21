@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -121,10 +122,10 @@ int main(int argc, char* argv[]) {
     if (daemon(1, 0) != 0)
       runtime_failure("Cannot daemonize in '" << argv[0] << "' executable!");
 
-    // Redirect cerr to syslog
+    // Redirect Rcpp::Rcout to syslog
     openlog("nametag_server", 0, LOG_USER);
     static syslog_streambuf syslog;
-    cerr.rdbuf(&syslog);
+    Rcpp::Rcout.rdbuf(&syslog);
   }
 #endif
 
@@ -140,7 +141,7 @@ int main(int argc, char* argv[]) {
   if (!server.start(&service, port))
     runtime_failure("Cannot start nametag_server'!");
 
-  cerr << "Successfully started nametag_server on port " << port << "." << endl;
+  Rcpp::Rcout << "Successfully started nametag_server on port " << port << "." << endl;
 
   // Wait until finished
   server.wait_until_signalled();

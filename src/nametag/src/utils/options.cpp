@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of UFAL C++ Utils <http://github.com/ufal/cpp_utils/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
@@ -32,19 +33,19 @@ bool options::parse(const unordered_map<string, value>& allowed, int& argc, char
 
       string key = equal_sign ? string(option, equal_sign - option) : string(option);
       auto option_info = allowed.find(key);
-      if (option_info == allowed.end()) return cerr << "Unknown option '" << argv[argi] << "'." << endl, false;
+      if (option_info == allowed.end()) return Rcpp::Rcout << "Unknown option '" << argv[argi] << "'." << endl, false;
 
       string value;
-      if (option_info->second.allowed == value::NONE && equal_sign) return cerr << "Option '" << key << "' cannot have value." << endl, false;
+      if (option_info->second.allowed == value::NONE && equal_sign) return Rcpp::Rcout << "Option '" << key << "' cannot have value." << endl, false;
       if (option_info->second.allowed != value::NONE) {
         if (equal_sign) {
           value.assign(equal_sign + 1);
         } else {
-          if (argi + 1 == argc) return cerr << "Missing value for option '" << key << "'." << endl, false;
+          if (argi + 1 == argc) return Rcpp::Rcout << "Missing value for option '" << key << "'." << endl, false;
           value.assign(argv[++argi]);
         }
         if (!(option_info->second.allowed == value::ANY || (option_info->second.allowed == value::SET && option_info->second.set.count(value))))
-          return cerr << "Option '" << key << "' cannot have value '" << value << "'." << endl, false;
+          return Rcpp::Rcout << "Option '" << key << "' cannot have value '" << value << "'." << endl, false;
       }
       options[key] = value;
     } else {

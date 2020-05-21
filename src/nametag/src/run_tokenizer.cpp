@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -36,10 +37,10 @@ int main(int argc, char* argv[]) {
   if (options.count("version"))
     return cout << version::version_and_copyright() << endl, 0;
 
-  cerr << "Loading ner: ";
+  Rcpp::Rcout << "Loading ner: ";
   unique_ptr<ner> recognizer(ner::load(argv[1]));
   if (!recognizer) runtime_failure("Cannot load ner from file '" << argv[1] << "'!");
-  cerr << "done" << endl;
+  Rcpp::Rcout << "done" << endl;
 
   unique_ptr<tokenizer> tokenizer(recognizer->new_tokenizer());
   if (!tokenizer) runtime_failure("No tokenizer is defined for the supplied model!");

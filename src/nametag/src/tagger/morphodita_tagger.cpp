@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -24,13 +25,13 @@ bool morphodita_tagger::load(istream& is) {
 }
 
 bool morphodita_tagger::create_and_encode(const string& params, ostream& os) {
-  if (params.empty()) return cerr << "Missing tagger_file argument to morphodita_tagger!" << endl, false;
+  if (params.empty()) return Rcpp::Rcout << "Missing tagger_file argument to morphodita_tagger!" << endl, false;
 
   ifstream in(params, ifstream::in | ifstream::binary);
-  if (!in.is_open()) return cerr << "Cannot open morphodita tagger file '" << params << "'!" << endl, false;
-  if (!load(in)) return cerr << "Cannot load morphodita tagger from file '" << params << "'!" << endl, false;
+  if (!in.is_open()) return Rcpp::Rcout << "Cannot open morphodita tagger file '" << params << "'!" << endl, false;
+  if (!load(in)) return Rcpp::Rcout << "Cannot load morphodita tagger from file '" << params << "'!" << endl, false;
 
-  if (!in.seekg(0, ifstream::beg)) return cerr << "Cannot seek in morphodita tagger file '" << params << "'!" << endl, false;
+  if (!in.seekg(0, ifstream::beg)) return Rcpp::Rcout << "Cannot seek in morphodita tagger file '" << params << "'!" << endl, false;
   os << in.rdbuf();
 
   return bool(os);

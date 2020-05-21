@@ -93,7 +93,7 @@ int czech_lemma_addinfo::parse(string_piece lemma, bool die_on_failure) {
 
       if (lemma_additional_info == lemma_info + 1 || (*lemma_additional_info != '\0' && *lemma_additional_info != '`' && *lemma_additional_info != '_') || lemma_num < 0 || lemma_num >= 255) {
         if (die_on_failure)
-          runtime_failure("Lemma number " << lemma_num << " in lemma " << lemma << " out of range!");
+          runtime_failure("Lemma number " + std::to_string(lemma_num) + " in lemma " + std::string(lemma.str, lemma.len) + " out of range!");
         else
           lemma_num = 255;
       }
@@ -104,7 +104,7 @@ int czech_lemma_addinfo::parse(string_piece lemma, bool die_on_failure) {
 
     if (data.size() > 255) {
       if (die_on_failure)
-        runtime_failure("Too long lemma info " << lemma_info << " in lemma " << lemma << '!');
+        runtime_failure("Too long lemma info " + std::string(lemma_info) + " in lemma " + std::string(lemma.str, lemma.len) + '!');
       else
         data.resize(255);
     }

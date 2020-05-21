@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -25,38 +26,38 @@ void bilou_ner_trainer::train(ner_id id, int stages, const network_parameters& p
   // Load training and possibly also heldout data
   entity_map entities;
   vector<labelled_sentence> train_data;
-  cerr << "Loading train data: ";
+  Rcpp::Rcout << "Loading train data: ";
   load_data(train, tagger, train_data, entities, true);
-  cerr << "done, " << train_data.size() << " sentences" << endl;
-  cerr << "Found " << entities.size() << " annotated entity types." << endl;
+  Rcpp::Rcout << "done, " << train_data.size() << " sentences" << endl;
+  Rcpp::Rcout << "Found " << entities.size() << " annotated entity types." << endl;
 
   vector<labelled_sentence> heldout_data;
   if (heldout) {
-    cerr << "Loading heldout data: ";
+    Rcpp::Rcout << "Loading heldout data: ";
     load_data(heldout, tagger, heldout_data, entities, false);
-    cerr << "done, " << heldout_data.size() << " sentences" << endl;
+    Rcpp::Rcout << "done, " << heldout_data.size() << " sentences" << endl;
   }
 
   // Parse feature templates
   feature_templates templates;
   unique_ptr<tokenizer> tokenizer(bilou_ner::new_tokenizer(id));
-  cerr << "Parsing feature templates: ";
+  Rcpp::Rcout << "Parsing feature templates: ";
   templates.parse(features, entities, nlp_pipeline(tokenizer.get(), &tagger));
-  cerr << "done" << endl;
+  Rcpp::Rcout << "done" << endl;
 
   // Train required number of stages
   vector<network_classifier> networks(stages);
 
   for (auto&& network : networks) {
     // Generate features
-    cerr << "Generating features: ";
+    Rcpp::Rcout << "Generating features: ";
     vector<classifier_instance> train_instances, heldout_instances;
     generate_instances(train_data, templates, train_instances, true);
     generate_instances(heldout_data, templates, heldout_instances, false);
-    cerr << "done" << endl;
+    Rcpp::Rcout << "done" << endl;
 
     // Train and encode the recognizer
-    cerr << "Training network classifier." << endl;
+    Rcpp::Rcout << "Training network classifier." << endl;
     if (!network.train(templates.get_total_features(), bilou_entity::total(entities.size()), train_instances, heldout_instances, parameters, true))
       runtime_failure("Cannot train the network classifier!");
 
@@ -66,7 +67,7 @@ void bilou_ner_trainer::train(ner_id id, int stages, const network_parameters& p
   }
 
   // Encode the recognizer
-  cerr << "Encoding the recognizer." << endl;
+  Rcpp::Rcout << "Encoding the recognizer." << endl;
   if (!entities.save(os)) runtime_error("Cannot save entity map!");
   if (!templates.save(os)) runtime_error("Cannot save feature templates!");
   if (!os.put(stages)) runtime_error("Cannot save number of stages!");
@@ -108,7 +109,7 @@ void bilou_ner_trainer::load_data(istream& is, const tagger& tagger, vector<labe
             sentence.outcomes.emplace_back(!has_prev && !has_next ? bilou_entity::U(entity) : !has_prev && has_next ? bilou_entity::B(entity) : has_prev && has_next ? bilou_entity::I : bilou_entity::L);
           }
           else
-            runtime_failure("Cannot parse entity type " << entities[i] << "!");
+            runtime_failure("Cannot parse entity type " + entities[i] + "!");
 
         // Start a new sentence
         words.clear();
@@ -117,7 +118,7 @@ void bilou_ner_trainer::load_data(istream& is, const tagger& tagger, vector<labe
       if (eof) break;
     } else {
       split(line, '\t', tokens);
-      if (tokens.size() != 2) runtime_failure("The NER data line '" << line << "' does not contain two columns!");
+      if (tokens.size() != 2) runtime_failure("The NER data line '" + line + "' does not contain two columns!");
       words.emplace_back(tokens[0]);
       entities.emplace_back(tokens[1]);
     }

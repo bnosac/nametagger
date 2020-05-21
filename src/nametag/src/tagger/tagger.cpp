@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -39,15 +40,15 @@ tagger* tagger::create_and_encode_instance(const string& tagger_id_and_params, o
 
   // Parse tagger_id
   tagger_ids::tagger_id id;
-  if (!tagger_ids::parse(tagger_id, id)) return cerr << "Unknown tagger_id '" << tagger_id << "'!" << endl, nullptr;
+  if (!tagger_ids::parse(tagger_id, id)) return Rcpp::Rcout << "Unknown tagger_id '" << tagger_id << "'!" << endl, nullptr;
 
   // Create instance
   unique_ptr<tagger> res(create(id));
-  if (!res) return cerr << "Cannot create instance for tagger_id '" << tagger_id << "'!" << endl, nullptr;
+  if (!res) return Rcpp::Rcout << "Cannot create instance for tagger_id '" << tagger_id << "'!" << endl, nullptr;
 
   // Load and encode the tagger
   os.put(id);
-  if (!res->create_and_encode(params, os)) return cerr << "Cannot encode instance of tagger_id '" << tagger_id << "'!" << endl, nullptr;
+  if (!res->create_and_encode(params, os)) return Rcpp::Rcout << "Cannot encode instance of tagger_id '" << tagger_id << "'!" << endl, nullptr;
 
   return res.release();
 }

@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -82,7 +83,7 @@ int main(int argc, char* argv[]) {
         // Encode the ner itself
         bilou_ner_trainer::train(id, stages, parameters, *tagger, features, cin, heldout, cout);
 
-        cerr << "Recognizer saved." << endl;
+        Rcpp::Rcout << "Recognizer saved." << endl;
         break;
       }
     default:

@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of UFAL C++ Utils <http://github.com/ufal/cpp_utils/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
@@ -34,7 +35,7 @@ static_assert(sizeof(int) >= sizeof(int32_t), "Int must be at least 4B wide!");
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Only little endian systems are supported!");
 #endif
 
-#define runtime_failure(message) exit((cerr << message << endl, 1))
+#define runtime_failure(message) Rcpp::stop(message)
 
 } // namespace utils
 } // namespace nametag

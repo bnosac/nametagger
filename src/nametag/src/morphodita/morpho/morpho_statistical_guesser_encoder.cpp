@@ -32,18 +32,18 @@ void morpho_statistical_guesser_encoder::encode(istream& is, binary_encoder& enc
 
   while (getline(is, line)) {
     split(line, '\t', tokens);
-    if (tokens.size() < 3 || (tokens.size() % 2) != 1) runtime_failure("Cannot parse line " << line << " in statistical guesser file!");
+    if (tokens.size() < 3 || (tokens.size() % 2) != 1) runtime_failure("Cannot parse line " + line + " in statistical guesser file!");
 
     vector<string> affixes;
     split(tokens[0], ' ', affixes);
-    if (affixes.size() != 2) runtime_failure("Cannot parse prefix_suffix '" << tokens[0] << "' in statistical guesser file!");
+    if (affixes.size() != 2) runtime_failure("Cannot parse prefix_suffix '" + tokens[0] + "' in statistical guesser file!");
     reverse(affixes[1].begin(), affixes[1].end());
 
     auto& rules = statistical_guesser[affixes[1] + ' ' + affixes[0]];
     for (unsigned i = 1; i < tokens.size(); i+= 2) {
       vector<string> replacements;
       split(tokens[i], ' ', replacements);
-      if (replacements.size() != 4) runtime_failure("Cannot parse replacement rule '" << tokens[i] << "' in statistical guesser file!");
+      if (replacements.size() != 4) runtime_failure("Cannot parse replacement rule '" + tokens[i] + "' in statistical guesser file!");
 
       vector<string> rule_tags;
       split(tokens[i+1], ' ', rule_tags);

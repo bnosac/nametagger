@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
@@ -23,7 +24,7 @@ void external_morpho_encoder::encode(const string& unknown_tag, ostream& out_mor
   enc.add_data(unknown_tag);
 
   if (!compressor::save(out_morpho, enc)) runtime_failure("Cannot compress and write dictionary to file!");
-  cerr << "Dictionary saved." << endl;
+  Rcpp::Rcout << "Dictionary saved." << endl;
 }
 
 } // namespace morphodita

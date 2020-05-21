@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of MicroRestD <http://github.com/ufal/microrestd/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
@@ -119,7 +120,7 @@ rest_server::microhttpd_request::microhttpd_request(const rest_server& server, M
        http_value_compare(content_type, MHD_HTTP_POST_ENCODING_MULTIPART_FORMDATA));
   if (need_post_processor) {
     post_processor.reset(MHD_create_post_processor(connection, 32 << 10, &post_iterator, this));
-    if (!post_processor) cerr << "Cannot allocate new post processor!" << endl;
+    if (!post_processor) Rcpp::Rcout << "Cannot allocate new post processor!" << endl;
   }
 
   // Collect GET arguments
@@ -481,7 +482,7 @@ int rest_server::handle_request(void* cls, struct MHD_Connection* connection, co
     if (!content_type) content_type = "";
 
     if (!(request = new microhttpd_request(*self, connection, url, content_type, method)))
-      return cerr << "Cannot allocate new request!" << endl, MHD_NO;
+      return Rcpp::Rcout << "Cannot allocate new request!" << endl, MHD_NO;
 
     *con_cls = request;
     return MHD_YES;

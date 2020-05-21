@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -56,17 +57,17 @@ class brown_clusters : public feature_processor {
   virtual bool parse(int window, const vector<string>& args, entity_map& entities,
                      ner_feature* total_features, const nlp_pipeline& pipeline) override {
     if (!feature_processor::parse(window, args, entities, total_features, pipeline)) return false;
-    if (args.size() < 1) return cerr << "BrownCluster requires a cluster file as the first argument!" << endl, false;
+    if (args.size() < 1) return Rcpp::Rcout << "BrownCluster requires a cluster file as the first argument!" << endl, false;
 
     ifstream in(args[0]);
-    if (!in.is_open()) return cerr << "Cannot open Brown clusters file '" << args[0] << "'!" << endl, false;
+    if (!in.is_open()) return Rcpp::Rcout << "Cannot open Brown clusters file '" << args[0] << "'!" << endl, false;
 
     vector<size_t> substrings;
     substrings.emplace_back(string::npos);
     for (unsigned i = 1; i < args.size(); i++) {
       int len = parse_int(args[i].c_str(), "BrownCluster_prefix_length");
       if (len <= 0)
-        return cerr << "Wrong prefix length '" << len << "' in BrownCluster specification!" << endl, false;
+        return Rcpp::Rcout << "Wrong prefix length '" << len << "' in BrownCluster specification!" << endl, false;
       else
         substrings.emplace_back(len);
     }
@@ -78,7 +79,7 @@ class brown_clusters : public feature_processor {
     vector<string> tokens;
     while (getline(in, line)) {
       split(line, '\t', tokens);
-      if (tokens.size() != 2) return cerr << "Wrong line '" << line << "' in Brown cluster file '" << args[0] << "'!" << endl, false;
+      if (tokens.size() != 2) return Rcpp::Rcout << "Wrong line '" << line << "' in Brown cluster file '" << args[0] << "'!" << endl, false;
 
       string cluster = tokens[0], form = tokens[1];
       auto it = cluster_map.find(cluster);
@@ -90,7 +91,7 @@ class brown_clusters : public feature_processor {
             clusters.back().emplace_back(prefixes_map.emplace(cluster.substr(0, substring), *total_features + (2*window + 1) * prefixes_map.size() + window).first->second);
         it = cluster_map.emplace(cluster, id).first;
       }
-      if (!map.emplace(form, it->second).second) return cerr << "Form '" << form << "' is present twice in Brown cluster file '" << args[0] << "'!" << endl, false;
+      if (!map.emplace(form, it->second).second) return Rcpp::Rcout << "Form '" << form << "' is present twice in Brown cluster file '" << args[0] << "'!" << endl, false;
     }
 
     *total_features += (2*window + 1) * prefixes_map.size();
@@ -139,7 +140,7 @@ class brown_clusters : public feature_processor {
 class czech_add_containers : public feature_processor {
  public:
   virtual bool parse(int window, const vector<string>& args, entity_map& entities, ner_feature* total_features, const nlp_pipeline& pipeline) override {
-    if (window) return cerr << "CzechAddContainers cannot have non-zero window!" << endl, false;
+    if (window) return Rcpp::Rcout << "CzechAddContainers cannot have non-zero window!" << endl, false;
 
     return feature_processor::parse(window, args, entities, total_features, pipeline);
   }
@@ -263,14 +264,14 @@ class gazetteers : public feature_processor {
 
   virtual bool parse(int window, const vector<string>& args, entity_map& entities,
                      ner_feature* total_features, const nlp_pipeline& pipeline) override {
-    cerr << "The 'Gazetteers' feature template is deprecated, use 'GazetteersEnhanced' !" << endl;
+    Rcpp::Rcout << "The 'Gazetteers' feature template is deprecated, use 'GazetteersEnhanced' !" << endl;
 
     if (!feature_processor::parse(window, args, entities, total_features, pipeline)) return false;
 
     gazetteers_info.clear();
     for (auto&& arg : args) {
       ifstream in(arg.c_str());
-      if (!in.is_open()) return cerr << "Cannot open gazetteers file '" << arg << "'!" << endl, false;
+      if (!in.is_open()) return Rcpp::Rcout << "Cannot open gazetteers file '" << arg << "'!" << endl, false;
 
       unsigned longest = 0;
       string gazetteer;
@@ -376,17 +377,17 @@ class gazetteers_enhanced : public feature_processor {
     gazetteer_metas.clear();
     gazetteer_lists.clear();
 
-    if (args.size() < 4) return cerr << "Not enough parameters to GazetteersEnhanced!" << endl, false;
-    if (args.size() & 1) return cerr << "Odd number of parameters to GazetteersEnhanced!" << endl, false;
+    if (args.size() < 4) return Rcpp::Rcout << "Not enough parameters to GazetteersEnhanced!" << endl, false;
+    if (args.size() & 1) return Rcpp::Rcout << "Odd number of parameters to GazetteersEnhanced!" << endl, false;
 
     if (args[0] == "form") match = MATCH_FORM;
     else if (args[0] == "rawlemma") match = MATCH_RAWLEMMA;
     else if (args[0] == "rawlemmas") match = MATCH_RAWLEMMAS;
-    else return cerr << "First parameter of GazetteersEnhanced not one of form/rawlemma/rawlemmas!" << endl, false;
+    else return Rcpp::Rcout << "First parameter of GazetteersEnhanced not one of form/rawlemma/rawlemmas!" << endl, false;
 
     if (args[1] == "embed_in_model") embed = EMBED_IN_MODEL;
     else if (args[1] == "out_of_model") embed = OUT_OF_MODEL;
-    else return cerr << "Second parameter of GazetteersEnhanced not one of [embed_in|out_of]_model!" << endl, false;
+    else return Rcpp::Rcout << "Second parameter of GazetteersEnhanced not one of [embed_in|out_of]_model!" << endl, false;
 
     for (unsigned i = 2; i < args.size(); i += 2) {
       gazetteer_metas.emplace_back();
@@ -641,7 +642,7 @@ class gazetteers_enhanced : public feature_processor {
         ifstream file(file_name);
         if (!file.is_open()) {
           if (mode == SOFT && files_must_exist)
-            return cerr << "Cannot open gazetteers file '" << file_name << "'!" << endl, false;
+            return Rcpp::Rcout << "Cannot open gazetteers file '" << file_name << "'!" << endl, false;
           continue;
         }
 
@@ -906,11 +907,11 @@ class suffix : public feature_processor {
   virtual bool parse(int window, const vector<string>& args, entity_map& entities,
                      ner_feature* total_features, const nlp_pipeline& pipeline) override {
     if (!feature_processor::parse(window, args, entities, total_features, pipeline)) return false;
-    if (args.size() != 2) return cerr << "*Suffix features require exactly two arguments -- shortest and longest suffix length!" << endl, false;
+    if (args.size() != 2) return Rcpp::Rcout << "*Suffix features require exactly two arguments -- shortest and longest suffix length!" << endl, false;
 
     string error;
-    if (!parse_int(args[0], "*Suffix shortest length", shortest, error)) return cerr << error << endl, false;
-    if (!parse_int(args[1], "*Suffix longest length", longest, error)) return cerr << error << endl, false;
+    if (!parse_int(args[0], "*Suffix shortest length", shortest, error)) return Rcpp::Rcout << error << endl, false;
+    if (!parse_int(args[1], "*Suffix longest length", longest, error)) return Rcpp::Rcout << error << endl, false;
     return true;
   }
 
@@ -973,13 +974,13 @@ class url_email_detector : public feature_processor {
   virtual bool parse(int window, const vector<string>& args, entity_map& entities,
                      ner_feature* total_features, const nlp_pipeline& pipeline) override {
     if (!feature_processor::parse(window, args, entities, total_features, pipeline)) return false;
-    if (args.size() != 2) return cerr << "URLEmailDetector requires exactly two arguments -- named entity types for URL and email!" << endl, false;
+    if (args.size() != 2) return Rcpp::Rcout << "URLEmailDetector requires exactly two arguments -- named entity types for URL and email!" << endl, false;
 
     url = entities.parse(args[0].c_str(), true);
     email = entities.parse(args[1].c_str(), true);
 
     if (url == entity_type_unknown || email == entity_type_unknown)
-      return cerr << "Cannot create entities '" << args[0] << "' and '" << args[1] << "' in URLEmailDetector!" << endl, false;
+      return Rcpp::Rcout << "Cannot create entities '" << args[0] << "' and '" << args[1] << "' in URLEmailDetector!" << endl, false;
     return true;
   }
 

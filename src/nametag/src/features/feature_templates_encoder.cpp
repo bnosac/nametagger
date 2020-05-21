@@ -26,11 +26,11 @@ void feature_templates::parse(istream& is, entity_map& entities, const nlp_pipel
     if (line.empty() || line[0] == '#') continue;
 
     split(line, ' ', tokens);
-    if (tokens.size() < 1) runtime_failure("Bad line '" << line << "' of feature templates file!");
+    if (tokens.size() < 1) runtime_failure("Bad line '" + line + "' of feature templates file!");
 
     vector<string> token0_parts;
     split(tokens[0], '/', token0_parts);
-    if (token0_parts.size() < 1 || token0_parts.size() > 2) runtime_failure("Bad feature template description at line '" << line << "' of feature templates file!");
+    if (token0_parts.size() < 1 || token0_parts.size() > 2) runtime_failure("Bad feature template description at line '" + line + "' of feature templates file!");
 
     string template_name = token0_parts[0];
     int window = token0_parts.size() > 1 ? parse_int(token0_parts[1].c_str(), "feature_template_window") : 0;
@@ -41,13 +41,13 @@ void feature_templates::parse(istream& is, entity_map& entities, const nlp_pipel
     // Try initialize the processor
     auto* processor = feature_processor::create(template_name);
     if (processor) {
-      if (!processor->parse(window, args, entities, &total_features, pipeline)) runtime_failure("Cannot initialize feature processor '" << template_name << "' from line '" << line << "' of feature templates file!");
+      if (!processor->parse(window, args, entities, &total_features, pipeline)) runtime_failure("Cannot initialize feature processor '" + template_name + "' from line '" + line + "' of feature templates file!");
       processors.emplace_back(template_name, processor);
       continue;
     }
 
     // Fail
-    runtime_failure("Cannot create feature template '" << template_name << "' from line '" << line << "' of feature templates file!");
+    runtime_failure("Cannot create feature template '" + template_name + "' from line '" + line + "' of feature templates file!");
   }
 }
 

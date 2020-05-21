@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -25,16 +26,16 @@ namespace morphodita {
 
 void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool verbose, ostream& os) {
   // Load the morphology
-  cerr << "Loading morphology: ";
+  Rcpp::Rcout << "Loading morphology: ";
   auto dictionary_start = dictionary.tellg();
   unique_ptr<morpho> morpho(morpho::load(dictionary));
   if (!morpho) runtime_failure("Cannot load morpho model from given file!");
   if (morpho->get_derivator()) runtime_failure("The given morpho model already has a derivator!");
   auto dictionary_end = dictionary.tellg();
-  cerr << "done" << endl;
+  Rcpp::Rcout << "done" << endl;
 
   // Load the derivator
-  cerr << "Loading derivator data: ";
+  Rcpp::Rcout << "Loading derivator data: ";
 
   struct lemma_info {
     string sense;
@@ -57,12 +58,12 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
   vector<tagged_lemma_forms> matched_lemmas_forms;
   while (getline(is, line)) {
     split(line, '\t', tokens);
-    if (tokens.size() != 2) runtime_failure("Expected two tab separated columns on derivator line '" << line << "'!");
+    if (tokens.size() != 2) runtime_failure("Expected two tab separated columns on derivator line '" + line + "'!");
 
     // Generate all possible lemmas and parents
     for (int i = 0; i < 2; i++) {
       split(tokens[i], ' ', parts);
-      if (parts.size() > 2) runtime_failure("The derivator lemma desctiption '" << tokens[i] << "' contains two or more spaces!");
+      if (parts.size() > 2) runtime_failure("The derivator lemma desctiption '" + tokens[i] + "' contains two or more spaces!");
       bool is_lemma_id = parts.size() == 1;
 
       part_lid.assign(parts[0], 0, morpho->lemma_id_len(parts[0]));
@@ -85,7 +86,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
     }
     if (matched[0].empty() || matched[1].empty()) {
       if (verbose)
-        cerr << "Could not match a lemma from line '" << line << "', skipping." << endl;
+        Rcpp::Rcout << "Could not match a lemma from line '" << line << "', skipping." << endl;
       continue;
     }
 
@@ -96,7 +97,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
       for (auto&& parent : matched[1])
         derinet[lemma.first].parents.insert(parent.first);
   }
-  cerr << "done" << endl;
+  Rcpp::Rcout << "done" << endl;
 
   // Choose unique parent for every lemma
   for (auto&& lemma : derinet)
@@ -116,7 +117,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
       derinet[lemma.second.parent].children++;
 
       if (verbose)
-        cerr << lemma.first << lemma.second.comment << " -> " << lemma.second.parent << derinet[lemma.second.parent].comment << endl;
+        Rcpp::Rcout << lemma.first << lemma.second.comment << " -> " << lemma.second.parent << derinet[lemma.second.parent].comment << endl;
     }
 
   // Make sure the derinet contains no cycles
@@ -127,7 +128,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
       node = derinet.find(node->second.parent);
       if (node->second.mark) {
         if (node->second.mark == mark)
-          runtime_failure("The derivator data contains a cycle with lemma '" << lemma.first << "'!");
+          runtime_failure("The derivator data contains a cycle with lemma '" + lemma.first + "'!");
         break;
       }
       node->second.mark = mark;
@@ -135,7 +136,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
   }
 
   // Encode the derivator
-  cerr << "Encoding derivator: ";
+  Rcpp::Rcout << "Encoding derivator: ";
   os.put(morpho_ids::DERIVATOR_DICTIONARY);
 
   binary_encoder enc;
@@ -202,7 +203,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
   for (auto length = dictionary_end - dictionary_start; length; length--)
     os.put(dictionary.get());
 
-  cerr << "done" << endl;
+  Rcpp::Rcout << "done" << endl;
 }
 
 } // namespace morphodita

@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 // This file is part of NameTag <http://github.com/ufal/nametag/>.
 //
 // Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
@@ -62,17 +63,17 @@ void network_classifier::load_matrix(binary_decoder& data, vector<vector<T>>& m)
 bool network_classifier::train(unsigned features, unsigned outcomes, const vector<classifier_instance>& train,
                                const vector<classifier_instance>& heldout, const network_parameters& parameters, bool verbose) {
   // Assertions
-  if (features <= 0) { if (verbose) cerr << "There must be more than zero features!" << endl; return false; }
-  if (outcomes <= 0) { if (verbose) cerr << "There must be more than zero features!" << endl; return false; }
-  if (train.empty()) { if (verbose) cerr << "No training data!" << endl; return false; }
+  if (features <= 0) { if (verbose) Rcpp::Rcout << "There must be more than zero features!" << endl; return false; }
+  if (outcomes <= 0) { if (verbose) Rcpp::Rcout << "There must be more than zero features!" << endl; return false; }
+  if (train.empty()) { if (verbose) Rcpp::Rcout << "No training data!" << endl; return false; }
   for (auto&& instance : train) {
-    if (instance.outcome >= outcomes) { if (verbose) cerr << "Training instances out of range!" << endl; return false; }
+    if (instance.outcome >= outcomes) { if (verbose) Rcpp::Rcout << "Training instances out of range!" << endl; return false; }
     for(auto& feature : instance.features)
-      if (feature >= features) { if (verbose) cerr << "Training instances out of range!" << endl; return false; }
+      if (feature >= features) { if (verbose) Rcpp::Rcout << "Training instances out of range!" << endl; return false; }
   }
   for (auto&& instance : heldout)
     for(auto& feature : instance.features)
-      if (feature >= features) { if (verbose) cerr << "Heldout instances out of range!" << endl; return false; }
+      if (feature >= features) { if (verbose) Rcpp::Rcout << "Heldout instances out of range!" << endl; return false; }
 
   mt19937 generator(42);
   uniform_real_distribution<float> uniform(-0.1, 0.1);
@@ -124,7 +125,7 @@ bool network_classifier::train(unsigned features, unsigned outcomes, const vecto
     permutation.push_back(i);
 
   for (int iteration = 0; iteration < parameters.iterations; iteration++) {
-    if (verbose) cerr << "Iteration " << iteration + 1 << ": ";
+    if (verbose) Rcpp::Rcout << "Iteration " << iteration + 1 << ": ";
 
     double learning_rate = parameters.final_learning_rate && parameters.iterations > 1 ?
         exp(((parameters.iterations - 1 - iteration) * log(parameters.initial_learning_rate) + iteration * log(parameters.final_learning_rate)) / (parameters.iterations-1)) :
@@ -146,7 +147,7 @@ bool network_classifier::train(unsigned features, unsigned outcomes, const vecto
       backpropagate(instance, learning_rate, gaussian_sigma);
     }
     if (verbose)
-      cerr << "a " << fixed << setprecision(3) << learning_rate
+      Rcpp::Rcout << "a " << fixed << setprecision(3) << learning_rate
            << ", logprob " << scientific << setprecision(4) << logprob
            << ", training acc " << fixed << setprecision(2) << training_correct * 100. / train.size()
            << "%, ";
@@ -158,9 +159,9 @@ bool network_classifier::train(unsigned features, unsigned outcomes, const vecto
         propagate(instance.features);
         heldout_correct += best_outcome() == instance.outcome;
       }
-      if (verbose) cerr << "heldout acc " << heldout_correct * 100. / heldout.size() << ", ";
+      if (verbose) Rcpp::Rcout << "heldout acc " << heldout_correct * 100. / heldout.size() << ", ";
     }
-    if (verbose) cerr << "done." << endl;
+    if (verbose) Rcpp::Rcout << "done." << endl;
   }
   return true;
 }
