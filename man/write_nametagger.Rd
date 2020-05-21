@@ -7,33 +7,35 @@
 write_nametagger(x, file = tempfile(fileext = ".txt", pattern = "nametagger_"))
 }
 \arguments{
-\item{x}{a tokenised data.frame with columns doc_id, sentence_id, token containing 1 row per token. In addition
-it can have columns lemma and pos representing the lemma and the parts-of-speech tag of the token}
+\item{x}{a tokenised data.frame with columns doc_id, sentence_id, token containing 1 row per token. \cr
+In addition it can have columns lemma and pos representing the lemma and the parts-of-speech tag of the token}
 
 \item{file}{the path to the file where the training data will be saved}
 }
 \value{
-invisibly a character vector of text in the nametagger format
+invisibly an object of class nametagger_traindata which is a list with elements
+\itemize{
+\item{data: a character vector of text in the nametagger format}
+\item{file: the path to the file where \code{data} is saved to}
+}
 }
 \description{
 Save a tokenised dataset as nametagger train data
 }
 \examples{
-\dontshow{
-wd <- getwd()
-setwd(tempdir())
-}
-
 data(europeananews)
 x <- subset(europeananews, doc_id \%in\% "enp_NL.kb.bio")
 x <- head(x, n = 250)
 
-bio <- write_nametagger(x, file = "traindata.txt")
+path <- "traindata.txt" 
+\dontshow{
+path <- tempfile("traindata_", fileext = ".txt")
+}
+bio  <- write_nametagger(x, file = path)
 str(bio)
 
 \dontshow{
 # clean up for CRAN
-file.remove("traindata.txt")
-setwd(wd)
+file.remove(path)
 }
 }

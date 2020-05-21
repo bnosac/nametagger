@@ -36,8 +36,16 @@ print.nametagger <- function(x, ...){
 #' @export
 #' @return a data.frame with columns doc_id, sentence_id, token and entity
 #' @examples 
+#' path  <- system.file(package = "nametagger", "models", "exampletagger.ner")
+#' model <- nametagger_load_model(path)
+#' model
+#' 
+#' x <- c("I ga naar Brussel op reis.", "Goed zo dat zal je deugd doen Karel")
+#' entities <- predict(model, x, split = "[[:space:][:punct:]]+")                          
+#' entities
+#' 
 #' \donttest{
-#' model <- nametagger_download_model("english-conll-140408")
+#' model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
 #' 
 #' x <- data.frame(doc_id = c(1, 1, 2),
 #'                 sentence_id = c(1, 2, 1),
@@ -47,14 +55,6 @@ print.nametagger <- function(x, ...){
 #' entities <- predict(model, x)                          
 #' entities
 #' }
-#' 
-#' path  <- system.file(package = "nametagger", "models", "exampletagger.ner")
-#' model <- nametagger_load_model(path)
-#' model
-#' 
-#' x <- c("I ga naar Brussel op reis.", "Goed zo dat zal je deugd doen Karel")
-#' entities <- predict(model, x, split = "[[:space:][:punct:]]+")                          
-#' entities
 predict.nametagger <- function(object, newdata, split = "[[:space:]]+", ...){
   if(is.character(newdata)){
     newdata <- data.frame(doc_id = seq_along(newdata), 
@@ -70,28 +70,30 @@ predict.nametagger <- function(object, newdata, split = "[[:space:]]+", ...){
 
 #' @title Save a tokenised dataset as nametagger train data
 #' @description Save a tokenised dataset as nametagger train data
-#' @param x a tokenised data.frame with columns doc_id, sentence_id, token containing 1 row per token. In addition
-#' it can have columns lemma and pos representing the lemma and the parts-of-speech tag of the token
+#' @param x a tokenised data.frame with columns doc_id, sentence_id, token containing 1 row per token. \cr
+#' In addition it can have columns lemma and pos representing the lemma and the parts-of-speech tag of the token
 #' @param file the path to the file where the training data will be saved
 #' @export
-#' @return invisibly a character vector of text in the nametagger format
-#' @examples 
-#' \dontshow{
-#' wd <- getwd()
-#' setwd(tempdir())
+#' @return invisibly an object of class nametagger_traindata which is a list with elements
+#' \itemize{
+#' \item{data: a character vector of text in the nametagger format}
+#' \item{file: the path to the file where \code{data} is saved to}
 #' }
-#' 
+#' @examples 
 #' data(europeananews)
 #' x <- subset(europeananews, doc_id %in% "enp_NL.kb.bio")
 #' x <- head(x, n = 250)
-#' 
-#' bio <- write_nametagger(x, file = "traindata.txt")
+#'
+#' path <- "traindata.txt" 
+#' \dontshow{
+#' path <- tempfile("traindata_", fileext = ".txt")
+#' }
+#' bio  <- write_nametagger(x, file = path)
 #' str(bio)
 #' 
 #' \dontshow{
 #' # clean up for CRAN
-#' file.remove("traindata.txt")
-#' setwd(wd)
+#' file.remove(path)
 #' }
 write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nametagger_")){
   if("lemma" %in% colnames(x)){
@@ -136,16 +138,18 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' @export
 #' @return an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
 #' @examples 
-#' \dontshow{
-#' wd <- getwd()
-#' setwd(tempdir())
-#' }
-#' 
 #' data(europeananews)
 #' x <- subset(europeananews, doc_id %in% "enp_NL.kb.bio")
 #' traindata <- subset(x, sentence_id >  20)
 #' testdata  <- subset(x, sentence_id <= 20)
-#' opts <- nametagger_options(token = list(window = 2),
+#' path <- "nametagger-nl.ner" 
+#' \dontshow{
+#' path <- tempfile("nametagger-nl_", fileext = ".net")
+#' traindata <- subset(x, sentence_id >  20 & sentence_id < 40)
+#' testdata  <- subset(x, sentence_id <= 20)
+#' } 
+#' opts <- nametagger_options(file = path,
+#'                            token = list(window = 2),
 #'                            token_normalisedsuffix = list(window = 0, from = 1, to = 4),
 #'                            ner_previous = list(window = 2),
 #'                            time = list(use = TRUE),
@@ -172,20 +176,23 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' features <- system.file(package = "nametagger", 
 #'                         "models", "features_default.txt")
 #' cat(readLines(features), sep = "\n")
-#' write_nametagger(x, file = "traindata.txt")
+#' path_traindata <- "traindata.txt" 
 #' \dontshow{
-#' model <- nametagger("traindata.txt", iter = 1, control = features)
+#' path_traindata <- tempfile("traindata_", fileext = ".txt")
+#' }
+#' write_nametagger(x, file = path_traindata)
+#' \dontshow{
+#' model <- nametagger(path_traindata, iter = 1, control = features)
 #' }
 #' \donttest{
-#' model <- nametagger("traindata.txt", iter = 30, control = features)
+#' model <- nametagger(path_traindata, iter = 30, control = features)
 #' model
 #' }
 #' 
 #' \dontshow{
 #' # clean up for CRAN
-#' file.remove("traindata.txt")
-#' file.remove(model$file_model)
-#' setwd(wd)
+#' file.remove(path)
+#' file.remove(path_traindata)
 #' }
 nametagger <- function(x.train, 
                        x.test = NULL,
@@ -283,14 +290,20 @@ parse_training_log <- function(x){
 }
 
 #' @title Define text transformations serving as predictive elements in the nametagger model
-#' @description Define text transformations. Each should be a list with elements \code{use} and \code{window}. \cr
-#' Where \code{use} is a logical indicating if the transformation should be used in the model. 
-#' And \code{window} specifies how many adjacent words can observe the feature template value of a given word, 
-#' with default value of 0 denoting only the word in question. \cr
-#' If you specifiy the argument without specifying use, it will by default use it.
-#' For arguments brown, gazetteers and gazetteers_enhanced, see the examples
+#' @description Define text transformations which are relevant in predicting your entity. 
+#' Typical text transformations are the token itself, the lemma, the parts of speech tag of the token
+#' or the token/lemma's and parts of speech tags in the neighbourhood of the word. \cr
+#' 
+#' Each argument should be a list with elements \code{use} and \code{window}. \cr
+#' \itemize{
+#' \item{\code{use} is a logical indicating if the transformation should be used in the model. }
+#' \item{\code{window} specifies how many adjacent words can observe the feature template value of a given word. The default value of 0 denotes only the word in question, no surrounding words.}
+#' }
+#' If you specifiy the argument without specifying \code{use}, it will by default use it.
+#' For arguments brown, gazetteers and gazetteers_enhanced, see the examples and 
+#' the documentation at \url{http://ufal.mff.cuni.cz/nametag}.
 #' @param file path to the filename where the model will be saved
-#' @param type either one of 'generic', 'english' or 'czech'
+#' @param type either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{http://ufal.mff.cuni.cz/nametag}.
 #' @param tagger either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)
 #' @param token use forms as features
 #' @param token_capitalised use capitalization of form as features
@@ -314,7 +327,7 @@ parse_training_log <- function(x){
 #' \item{file_base.hard_post.txt: after running the NER model, tokens not recognized as entities are matched against the gazetteers (again finding non-overlapping entities, preferring the ones starting earlier and longer ones in case of ties) and marked as entity type if found}
 #' }
 #' @export
-#' @return an object of class \code{nametagger_options}
+#' @return an object of class \code{nametagger_options} with transformation information to be used by \code{\link{nametagger}}
 #' @examples 
 #' opts <- nametagger_options(token = list(window = 2))
 #' opts
@@ -445,10 +458,12 @@ print.nametagger_options <- function(x, ...){
 
 
 #' @title Download a Nametag model
-#' @description Download a Nametag model. Note that models have licence CC-BY-SA-NC
+#' @description Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
+#' More details at \url{http://ufal.mff.cuni.cz/nametag}.
 #' @param language 'english-conll-140408'
 #' @param model_dir a path where the model will be downloaded to. Defaults to the current working directory
 #' @return an object of class nametagger 
+#' @references \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3118}
 #' @export
 #' @examples 
 #' \donttest{

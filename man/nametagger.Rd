@@ -53,16 +53,18 @@ an object of class \code{nametagger} containing an extra list element called sta
 Train a Named Entity Recognition Model using NameTag
 }
 \examples{
-\dontshow{
-wd <- getwd()
-setwd(tempdir())
-}
-
 data(europeananews)
 x <- subset(europeananews, doc_id \%in\% "enp_NL.kb.bio")
 traindata <- subset(x, sentence_id >  20)
 testdata  <- subset(x, sentence_id <= 20)
-opts <- nametagger_options(token = list(window = 2),
+path <- "nametagger-nl.ner" 
+\dontshow{
+path <- tempfile("nametagger-nl_", fileext = ".net")
+traindata <- subset(x, sentence_id >  20 & sentence_id < 40)
+testdata  <- subset(x, sentence_id <= 20)
+} 
+opts <- nametagger_options(file = path,
+                           token = list(window = 2),
                            token_normalisedsuffix = list(window = 0, from = 1, to = 4),
                            ner_previous = list(window = 2),
                            time = list(use = TRUE),
@@ -89,19 +91,22 @@ predict(model,
 features <- system.file(package = "nametagger", 
                         "models", "features_default.txt")
 cat(readLines(features), sep = "\n")
-write_nametagger(x, file = "traindata.txt")
+path_traindata <- "traindata.txt" 
 \dontshow{
-model <- nametagger("traindata.txt", iter = 1, control = features)
+path_traindata <- tempfile("traindata_", fileext = ".txt")
+}
+write_nametagger(x, file = path_traindata)
+\dontshow{
+model <- nametagger(path_traindata, iter = 1, control = features)
 }
 \donttest{
-model <- nametagger("traindata.txt", iter = 30, control = features)
+model <- nametagger(path_traindata, iter = 30, control = features)
 model
 }
 
 \dontshow{
 # clean up for CRAN
-file.remove("traindata.txt")
-file.remove(model$file_model)
-setwd(wd)
+file.remove(path)
+file.remove(path_traindata)
 }
 }

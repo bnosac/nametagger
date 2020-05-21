@@ -18,10 +18,14 @@ nametagger_download_model(
 an object of class nametagger
 }
 \description{
-Download a Nametag model. Note that models have licence CC-BY-SA-NC
+Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
+More details at \url{http://ufal.mff.cuni.cz/nametag}.
 }
 \examples{
 \donttest{
 model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
 }
+}
+\references{
+\url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3118}
 }

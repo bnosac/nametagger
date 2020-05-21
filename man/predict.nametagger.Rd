@@ -23,8 +23,16 @@ a data.frame with columns doc_id, sentence_id, token and entity
 Perform Named Entity Recognition on tokenised text using a nametagger model
 }
 \examples{
+path  <- system.file(package = "nametagger", "models", "exampletagger.ner")
+model <- nametagger_load_model(path)
+model
+
+x <- c("I ga naar Brussel op reis.", "Goed zo dat zal je deugd doen Karel")
+entities <- predict(model, x, split = "[[:space:][:punct:]]+")                          
+entities
+
 \donttest{
-model <- nametagger_download_model("english-conll-140408")
+model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
 
 x <- data.frame(doc_id = c(1, 1, 2),
                 sentence_id = c(1, 2, 1),
@@ -34,12 +42,4 @@ x <- data.frame(doc_id = c(1, 1, 2),
 entities <- predict(model, x)                          
 entities
 }
-
-path  <- system.file(package = "nametagger", "models", "exampletagger.ner")
-model <- nametagger_load_model(path)
-model
-
-x <- c("I ga naar Brussel op reis.", "Goed zo dat zal je deugd doen Karel")
-entities <- predict(model, x, split = "[[:space:][:punct:]]+")                          
-entities
 }

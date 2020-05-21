@@ -28,7 +28,7 @@ nametagger_options(
 \arguments{
 \item{file}{path to the filename where the model will be saved}
 
-\item{type}{either one of 'generic', 'english' or 'czech'}
+\item{type}{either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{http://ufal.mff.cuni.cz/nametag}.}
 
 \item{tagger}{either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)}
 
@@ -68,15 +68,21 @@ nametagger_options(
 }}
 }
 \value{
-an object of class \code{nametagger_options}
+an object of class \code{nametagger_options} with transformation information to be used by \code{\link{nametagger}}
 }
 \description{
-Define text transformations. Each should be a list with elements \code{use} and \code{window}. \cr
-Where \code{use} is a logical indicating if the transformation should be used in the model. 
-And \code{window} specifies how many adjacent words can observe the feature template value of a given word, 
-with default value of 0 denoting only the word in question. \cr
-If you specifiy the argument without specifying use, it will by default use it.
-For arguments brown, gazetteers and gazetteers_enhanced, see the examples
+Define text transformations which are relevant in predicting your entity. 
+Typical text transformations are the token itself, the lemma, the parts of speech tag of the token
+or the token/lemma's and parts of speech tags in the neighbourhood of the word. \cr
+
+Each argument should be a list with elements \code{use} and \code{window}. \cr
+\itemize{
+\item{\code{use} is a logical indicating if the transformation should be used in the model. }
+\item{\code{window} specifies how many adjacent words can observe the feature template value of a given word. The default value of 0 denotes only the word in question, no surrounding words.}
+}
+If you specifiy the argument without specifying \code{use}, it will by default use it.
+For arguments brown, gazetteers and gazetteers_enhanced, see the examples and 
+the documentation at \url{http://ufal.mff.cuni.cz/nametag}.
 }
 \examples{
 opts <- nametagger_options(token = list(window = 2))
