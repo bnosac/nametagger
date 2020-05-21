@@ -97,10 +97,10 @@ path_traindata <- tempfile("traindata_", fileext = ".txt")
 }
 write_nametagger(x, file = path_traindata)
 \dontshow{
-model <- nametagger(path_traindata, iter = 1, control = features)
+model <- nametagger(path_traindata, iter = 1, control = features, file = path)
 }
 \donttest{
-model <- nametagger(path_traindata, iter = 30, control = features)
+model <- nametagger(path_traindata, iter = 30, control = features, file = path)
 model
 }
 

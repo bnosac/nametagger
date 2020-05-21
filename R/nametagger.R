@@ -182,10 +182,10 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' }
 #' write_nametagger(x, file = path_traindata)
 #' \dontshow{
-#' model <- nametagger(path_traindata, iter = 1, control = features)
+#' model <- nametagger(path_traindata, iter = 1, control = features, file = path)
 #' }
 #' \donttest{
-#' model <- nametagger(path_traindata, iter = 30, control = features)
+#' model <- nametagger(path_traindata, iter = 30, control = features, file = path)
 #' model
 #' }
 #' 
