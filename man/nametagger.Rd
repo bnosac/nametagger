@@ -27,7 +27,7 @@ nametagger(
 \item{iter}{the number of iterations performed when training each stage of the recognizer. With more iterations, training take longer (the recognition time is unaffected), but the model gets over-trained when too many iterations are used. Values from 10 to 30 or 50 are commonly used.}
 
 \item{lr}{learning rates used. Should be a vector of length 2 where 
-\enumerate{
+\itemize{
 \item{element 1: learning rate used in the first iteration of SGD training method of the log-linear model. Common value is 0.1.}
 \item{element 2: learning rate used in the last iteration of SGD training method of the log-linear model. Common values are in range from 0.1 to 0.001, with 0.01 working reasonably well.}
 }}
@@ -47,12 +47,17 @@ nametagger(
 \item{file}{path to the filename where the model will be saved}
 }
 \value{
-an object of class \code{nametagger}
+an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
 }
 \description{
 Train a Named Entity Recognition Model using NameTag
 }
 \examples{
+\dontshow{
+wd <- getwd()
+setwd(tempdir())
+}
+
 data(europeananews)
 x <- subset(europeananews, doc_id \%in\% "enp_NL.kb.bio")
 traindata <- subset(x, sentence_id >  20)
@@ -62,21 +67,41 @@ opts <- nametagger_options(token = list(window = 2),
                            ner_previous = list(window = 2),
                            time = list(use = TRUE),
                            url_email = list(url = "URL", email = "EMAIL"))
+\dontshow{
+model <- nametagger(x.train = traindata, x.test = testdata,
+                    iter = 1, lambda = 0.5, control = opts)
+}
+\donttest{
 model <- nametagger(x.train = traindata, 
                     x.test = testdata,
                     iter = 30, lambda = 0.5,
                     control = opts)
+}
 model
+plot(model$stats$iteration, model$stats$logprob, type = "b")
+plot(model$stats$iteration, model$stats$accuracy_train, type = "b", ylim = c(95, 100))
+lines(model$stats$iteration, model$stats$accuracy_test, type = "b", lty = 2, col = "red")
 predict(model, 
         "Ik heet Karel je kan me bereiken op paul@duchanel.be of www.duchanel.be", 
         split = "[[:space:]]+")
 
-write_nametagger(x, file = "traindata.txt")
-model <- nametagger("traindata.txt", iter = 3,
-                    control = system.file(package = "nametagger", 
-                                          "models", "features_default.txt"))
-model
 
+features <- system.file(package = "nametagger", 
+                        "models", "features_default.txt")
+cat(readLines(features), sep = "\n")
+write_nametagger(x, file = "traindata.txt")
+\dontshow{
+model <- nametagger("traindata.txt", iter = 1, control = features)
+}
+\donttest{
+model <- nametagger("traindata.txt", iter = 30, control = features)
+model
+}
+
+\dontshow{
+# clean up for CRAN
 file.remove("traindata.txt")
 file.remove(model$file_model)
+setwd(wd)
+}
 }

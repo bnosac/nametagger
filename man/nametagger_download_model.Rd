@@ -21,5 +21,7 @@ an object of class nametagger
 Download a Nametag model. Note that models have licence CC-BY-SA-NC
 }
 \examples{
-model <- nametagger_download_model("english-conll-140408")
+\donttest{
+model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
+}
 }

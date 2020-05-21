@@ -16,8 +16,8 @@ a data.frame with columns doc_id, sentence_id, token, entity
 Read Europeana Newspaper data. Data is made available at \url{https://github.com/EuropeanaNewspapers/ner-corpora} under the CC0 license.
 }
 \examples{
-\donttest{
 r <- "https://raw.githubusercontent.com/EuropeanaNewspapers/ner-corpora/master"
+\donttest{
 x <- file.path(r, "enp_NL.kb.bio", "enp_NL.kb.bio")
 x <- europeana_read(x)
 x <- file.path(r, "enp_FR.bnf.bio", "enp_FR.bnf.bio")

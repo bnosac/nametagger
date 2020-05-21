@@ -138,13 +138,13 @@ Rcpp::DataFrame nametag_annotate(SEXP model, Rcpp::StringVector x, Rcpp::StringV
 
 
 // [[Rcpp::export]]
-Rcpp::List nametag_train(std::string modelname, 
-                         std::string file, 
-                         const std::string type, 
-                         const char* features_file, const std::string input_type = "trivial", int stages = 1, int iterations = 30,
-                         double missing_weight = -0.2, double initial_learning_rate = 0.1, double final_learning_rate = 0.01,
-                         double gaussian = 0.5, int hidden_layer = 0,
-                         Rcpp::Nullable<Rcpp::CharacterVector> file_holdout = R_NilValue) {
+void nametag_train(std::string modelname, 
+                   std::string file, 
+                   const std::string type, 
+                   const char* features_file, const std::string input_type = "trivial", int stages = 1, int iterations = 30,
+                   double missing_weight = -0.2, double initial_learning_rate = 0.1, double final_learning_rate = 0.01,
+                   double gaussian = 0.5, int hidden_layer = 0,
+                   Rcpp::Nullable<Rcpp::CharacterVector> file_holdout = R_NilValue) {
   std::ifstream is (file);
   std::ofstream os;
   os.open (modelname, std::ios::binary);
@@ -187,11 +187,4 @@ Rcpp::List nametag_train(std::string modelname,
   }
   // Train
   bilou_ner_trainer::train(id, stages, parameters, *tagger, features, is, heldout, os);
-  
-  Rcpp::List out = Rcpp::List::create(
-    Rcpp::Named("doc_id") = 1,
-    Rcpp::Named("stringsAsFactors") = false
-  );
-  return out;
-  
 }

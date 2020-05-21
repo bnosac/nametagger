@@ -14,6 +14,6 @@ nametag_annotate <- function(model, x, docid, sentenceid) {
 }
 
 nametag_train <- function(modelname, file, type, features_file, input_type = "trivial", stages = 1L, iterations = 30L, missing_weight = -0.2, initial_learning_rate = 0.1, final_learning_rate = 0.01, gaussian = 0.5, hidden_layer = 0L, file_holdout = NULL) {
-    .Call('_nametagger_nametag_train', PACKAGE = 'nametagger', modelname, file, type, features_file, input_type, stages, iterations, missing_weight, initial_learning_rate, final_learning_rate, gaussian, hidden_layer, file_holdout)
+    invisible(.Call('_nametagger_nametag_train', PACKAGE = 'nametagger', modelname, file, type, features_file, input_type, stages, iterations, missing_weight, initial_learning_rate, final_learning_rate, gaussian, hidden_layer, file_holdout))
 }
 

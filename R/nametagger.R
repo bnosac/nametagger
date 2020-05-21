@@ -76,12 +76,23 @@ predict.nametagger <- function(object, newdata, split = "[[:space:]]+", ...){
 #' @export
 #' @return invisibly a character vector of text in the nametagger format
 #' @examples 
+#' \dontshow{
+#' wd <- getwd()
+#' setwd(tempdir())
+#' }
+#' 
 #' data(europeananews)
 #' x <- subset(europeananews, doc_id %in% "enp_NL.kb.bio")
 #' x <- head(x, n = 250)
 #' 
 #' bio <- write_nametagger(x, file = "traindata.txt")
 #' str(bio)
+#' 
+#' \dontshow{
+#' # clean up for CRAN
+#' file.remove("traindata.txt")
+#' setwd(wd)
+#' }
 write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nametagger_")){
   if("lemma" %in% colnames(x)){
     x$form <- paste(x$token, x$lemma, sep = " ")
@@ -113,7 +124,7 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' @param tagger either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)
 #' @param iter the number of iterations performed when training each stage of the recognizer. With more iterations, training take longer (the recognition time is unaffected), but the model gets over-trained when too many iterations are used. Values from 10 to 30 or 50 are commonly used.
 #' @param lr learning rates used. Should be a vector of length 2 where 
-#' \enumerate{
+#' \itemize{
 #' \item{element 1: learning rate used in the first iteration of SGD training method of the log-linear model. Common value is 0.1.}
 #' \item{element 2: learning rate used in the last iteration of SGD training method of the log-linear model. Common values are in range from 0.1 to 0.001, with 0.01 working reasonably well.}
 #' }
@@ -123,8 +134,13 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' @param control a file with predictive feature transformations serving as predictive elements in the model
 #' @param file path to the filename where the model will be saved
 #' @export
-#' @return an object of class \code{nametagger}
+#' @return an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
 #' @examples 
+#' \dontshow{
+#' wd <- getwd()
+#' setwd(tempdir())
+#' }
+#' 
 #' data(europeananews)
 #' x <- subset(europeananews, doc_id %in% "enp_NL.kb.bio")
 #' traindata <- subset(x, sentence_id >  20)
@@ -134,23 +150,43 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #'                            ner_previous = list(window = 2),
 #'                            time = list(use = TRUE),
 #'                            url_email = list(url = "URL", email = "EMAIL"))
+#' \dontshow{
+#' model <- nametagger(x.train = traindata, x.test = testdata,
+#'                     iter = 1, lambda = 0.5, control = opts)
+#' }
+#' \donttest{
 #' model <- nametagger(x.train = traindata, 
 #'                     x.test = testdata,
 #'                     iter = 30, lambda = 0.5,
 #'                     control = opts)
+#' }
 #' model
+#' plot(model$stats$iteration, model$stats$logprob, type = "b")
+#' plot(model$stats$iteration, model$stats$accuracy_train, type = "b", ylim = c(95, 100))
+#' lines(model$stats$iteration, model$stats$accuracy_test, type = "b", lty = 2, col = "red")
 #' predict(model, 
 #'         "Ik heet Karel je kan me bereiken op paul@duchanel.be of www.duchanel.be", 
 #'         split = "[[:space:]]+")
 #' 
-#' write_nametagger(x, file = "traindata.txt")
-#' model <- nametagger("traindata.txt", iter = 3,
-#'                     control = system.file(package = "nametagger", 
-#'                                           "models", "features_default.txt"))
-#' model
 #' 
+#' features <- system.file(package = "nametagger", 
+#'                         "models", "features_default.txt")
+#' cat(readLines(features), sep = "\n")
+#' write_nametagger(x, file = "traindata.txt")
+#' \dontshow{
+#' model <- nametagger("traindata.txt", iter = 1, control = features)
+#' }
+#' \donttest{
+#' model <- nametagger("traindata.txt", iter = 30, control = features)
+#' model
+#' }
+#' 
+#' \dontshow{
+#' # clean up for CRAN
 #' file.remove("traindata.txt")
 #' file.remove(model$file_model)
+#' setwd(wd)
+#' }
 nametagger <- function(x.train, 
                        x.test = NULL,
                        iter = 30L,
@@ -219,9 +255,32 @@ nametagger <- function(x.train,
                   initial_learning_rate = initial_learning_rate, final_learning_rate = final_learning_rate,
                   gaussian = gaussian, hidden_layer = hidden_layer, file_holdout = file_holdout)
     )
-  nametagger_load_model(file)
+  model <- nametagger_load_model(file)
+  model$log <- out
+  model$stats <- try(parse_training_log(out))
+  model
 }
 
+
+parse_training_log <- function(x){
+  # x <- c("Iteration 1: a 0.100, logprob -2.7850e+004, training acc 95.72%, heldout acc 97.62, done.", 
+  #        "Iteration 2: a 0.010, logprob -1.9276e+004, training acc 96.68%, heldout acc 97.88, done."
+  # )
+  x <- grep(x = x, pattern = "Iteration", value = TRUE)
+  x <- strsplit(x, ",")
+  lr <- sapply(x, FUN=function(x) grep(x, pattern = "Iteration", value = TRUE), USE.NAMES = FALSE)
+  if(length(lr) == 0){
+    return(NULL)
+  }
+  lr <- strsplit(lr, ":")
+  out <- list()
+  out$iteration <- as.integer(sapply(lr, FUN=function(x) gsub(x = grep(x, pattern = "Iteration", value = TRUE), pattern = "Iteration", replacement = ""), USE.NAMES = FALSE))
+  out$lr <- as.numeric(sapply(lr, FUN=function(x) gsub(x = grep(x, pattern = "a ", value = TRUE), pattern = "a", replacement = ""), USE.NAMES = FALSE))
+  out$logprob <- as.numeric(sapply(x, FUN=function(x) gsub(pattern = " ", replacement = "", gsub(x = grep(x, pattern = "logprob", value = TRUE), pattern = "logprob", replacement = "")), USE.NAMES = FALSE))
+  out$accuracy_train <- as.numeric(sapply(x, FUN=function(x) gsub(pattern = "%", replacement = "", gsub(x = grep(x, pattern = "training acc", value = TRUE), pattern = "training acc", replacement = "")), USE.NAMES = FALSE))
+  out$accuracy_test <- as.numeric(sapply(x, FUN=function(x) gsub(pattern = "%", replacement = "", gsub(x = grep(x, pattern = "heldout acc", value = TRUE), pattern = "heldout acc", replacement = "")), USE.NAMES = FALSE))
+  out
+}
 
 #' @title Define text transformations serving as predictive elements in the nametagger model
 #' @description Define text transformations. Each should be a list with elements \code{use} and \code{window}. \cr
@@ -392,7 +451,9 @@ print.nametagger_options <- function(x, ...){
 #' @return an object of class nametagger 
 #' @export
 #' @examples 
-#' model <- nametagger_download_model("english-conll-140408")
+#' \donttest{
+#' model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
+#' }
 nametagger_download_model <- function(language = c("english-conll-140408"), model_dir = getwd()){
   language <- match.arg(language)
   f <- file.path(tempdir(), "english-conll-140408.zip")

@@ -19,10 +19,21 @@ invisibly a character vector of text in the nametagger format
 Save a tokenised dataset as nametagger train data
 }
 \examples{
+\dontshow{
+wd <- getwd()
+setwd(tempdir())
+}
+
 data(europeananews)
 x <- subset(europeananews, doc_id \%in\% "enp_NL.kb.bio")
 x <- head(x, n = 250)
 
 bio <- write_nametagger(x, file = "traindata.txt")
 str(bio)
+
+\dontshow{
+# clean up for CRAN
+file.remove("traindata.txt")
+setwd(wd)
+}
 }

@@ -42,10 +42,9 @@ BEGIN_RCPP
 END_RCPP
 }
 // nametag_train
-Rcpp::List nametag_train(std::string modelname, std::string file, const std::string type, const char* features_file, const std::string input_type, int stages, int iterations, double missing_weight, double initial_learning_rate, double final_learning_rate, double gaussian, int hidden_layer, Rcpp::Nullable<Rcpp::CharacterVector> file_holdout);
+void nametag_train(std::string modelname, std::string file, const std::string type, const char* features_file, const std::string input_type, int stages, int iterations, double missing_weight, double initial_learning_rate, double final_learning_rate, double gaussian, int hidden_layer, Rcpp::Nullable<Rcpp::CharacterVector> file_holdout);
 RcppExport SEXP _nametagger_nametag_train(SEXP modelnameSEXP, SEXP fileSEXP, SEXP typeSEXP, SEXP features_fileSEXP, SEXP input_typeSEXP, SEXP stagesSEXP, SEXP iterationsSEXP, SEXP missing_weightSEXP, SEXP initial_learning_rateSEXP, SEXP final_learning_rateSEXP, SEXP gaussianSEXP, SEXP hidden_layerSEXP, SEXP file_holdoutSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type modelname(modelnameSEXP);
     Rcpp::traits::input_parameter< std::string >::type file(fileSEXP);
@@ -60,8 +59,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type gaussian(gaussianSEXP);
     Rcpp::traits::input_parameter< int >::type hidden_layer(hidden_layerSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type file_holdout(file_holdoutSEXP);
-    rcpp_result_gen = Rcpp::wrap(nametag_train(modelname, file, type, features_file, input_type, stages, iterations, missing_weight, initial_learning_rate, final_learning_rate, gaussian, hidden_layer, file_holdout));
-    return rcpp_result_gen;
+    nametag_train(modelname, file, type, features_file, input_type, stages, iterations, missing_weight, initial_learning_rate, final_learning_rate, gaussian, hidden_layer, file_holdout);
+    return R_NilValue;
 END_RCPP
 }
 
