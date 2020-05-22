@@ -30,11 +30,6 @@ SOURCES_NAMETAG = nametag/src/bilou/bilou_probabilities.cpp \
           nametag/src/morphodita/morpho/raw_morpho_dictionary_reader.cpp \
           nametag/src/morphodita/morpho/tag_filter.cpp \
           nametag/src/morphodita/tagger/tagger.cpp \
-          nametag/src/morphodita/tagset_converter/identity_tagset_converter.cpp \
-          nametag/src/morphodita/tagset_converter/pdt_to_conll2009_tagset_converter.cpp \
-          nametag/src/morphodita/tagset_converter/strip_lemma_comment_tagset_converter.cpp \
-          nametag/src/morphodita/tagset_converter/strip_lemma_id_tagset_converter.cpp \
-          nametag/src/morphodita/tagset_converter/tagset_converter.cpp \
           nametag/src/morphodita/tokenizer/czech_tokenizer.cpp \
           nametag/src/morphodita/tokenizer/english_tokenizer.cpp \
           nametag/src/morphodita/tokenizer/generic_tokenizer.cpp \
