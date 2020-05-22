@@ -20,9 +20,9 @@ nametagger(
 )
 }
 \arguments{
-\item{x.train}{a file with training data or the result of a call to \code{\link{write_nametagger}}}
+\item{x.train}{a file with training data or a data.frame which can be passed on to \code{\link{write_nametagger}}}
 
-\item{x.test}{an optional file with test data or the result of a call to \code{\link{write_nametagger}}}
+\item{x.test}{optionally, a file with test data or a data.frame which can be passed on to \code{\link{write_nametagger}}}
 
 \item{iter}{the number of iterations performed when training each stage of the recognizer. With more iterations, training take longer (the recognition time is unaffected), but the model gets over-trained when too many iterations are used. Values from 10 to 30 or 50 are commonly used.}
 
@@ -38,7 +38,7 @@ nametagger(
 
 \item{weight_missing}{default value of missing weights in the log-linear model. Common values are small negative real numbers like -0.2.}
 
-\item{control}{a file with predictive feature transformations serving as predictive elements in the model}
+\item{control}{the result of a call to \code{\link{nametagger_options}} a file with predictive feature transformations serving as predictive elements in the model}
 
 \item{type}{either one of 'generic', 'english' or 'czech'}
 
@@ -50,7 +50,7 @@ nametagger(
 an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
 }
 \description{
-Train a Named Entity Recognition Model using NameTag
+Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag}.
 }
 \examples{
 data(europeananews)

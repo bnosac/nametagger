@@ -119,9 +119,9 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 
 
 #' @title Train a Named Entity Recognition Model using NameTag
-#' @description Train a Named Entity Recognition Model using NameTag
-#' @param x.train a file with training data or the result of a call to \code{\link{write_nametagger}}
-#' @param x.test an optional file with test data or the result of a call to \code{\link{write_nametagger}}
+#' @description Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag}.
+#' @param x.train a file with training data or a data.frame which can be passed on to \code{\link{write_nametagger}}
+#' @param x.test optionally, a file with test data or a data.frame which can be passed on to \code{\link{write_nametagger}}
 #' @param type either one of 'generic', 'english' or 'czech'
 #' @param tagger either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)
 #' @param iter the number of iterations performed when training each stage of the recognizer. With more iterations, training take longer (the recognition time is unaffected), but the model gets over-trained when too many iterations are used. Values from 10 to 30 or 50 are commonly used.
@@ -133,7 +133,7 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' @param lambda the value of Gaussian prior imposed on the weights. In other words, value of L2-norm regularizer. Common value is either 0 for no regularization, or small real number like 0.5.
 #' @param stages the number of stages performed during recognition. Common values are either 1 or 2. With more stages, the model is larger and recognition is slower, but more accurate.
 #' @param weight_missing default value of missing weights in the log-linear model. Common values are small negative real numbers like -0.2.
-#' @param control a file with predictive feature transformations serving as predictive elements in the model
+#' @param control the result of a call to \code{\link{nametagger_options}} a file with predictive feature transformations serving as predictive elements in the model
 #' @param file path to the filename where the model will be saved
 #' @export
 #' @return an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
