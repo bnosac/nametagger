@@ -59,7 +59,7 @@ traindata <- subset(x, sentence_id >  100)
 testdata  <- subset(x, sentence_id <= 100)
 path <- "nametagger-nl.ner" 
 \dontshow{
-path <- tempfile("nametagger-nl_", fileext = ".net")
+path <- tempfile("nametagger-nl_", fileext = ".ner")
 traindata <- subset(x, sentence_id >  100 & sentence_id < 300)
 testdata  <- subset(x, sentence_id <= 100)
 } 
