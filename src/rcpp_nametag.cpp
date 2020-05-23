@@ -184,10 +184,10 @@ void nametag_train(std::string modelname,
   std::ifstream heldout;
   if (heldout_file) {
     heldout.open(heldout_file);
-    if (!heldout.is_open()){
-      REprintf("Cannot open heldout file %s", heldout_file);
-      Rcpp::stop("Cannot open heldout file "); 
-    }
+    //if (!heldout.is_open()){
+    //  REprintf("Cannot open heldout file %s", heldout_file);
+    //  Rcpp::stop("Cannot open heldout file "); 
+    //}
   } else {
     heldout.setstate(std::ios::failbit);
   }
