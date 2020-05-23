@@ -208,14 +208,12 @@ nametagger <- function(x.train,
                        tagger  = if(inherits(control, "nametagger_options")) control$tagger else "trivial", 
                        file    = if(inherits(control, "nametagger_options")) control$file else "nametagger.ner"){
   #heldout_data – optional parameter with heldout data in the described format. If the heldout data is present, the accuracy of the heldout data classification is printed during training. The heldout data is not used in any other way. 
-  file <- force(file)
-  tagger <- force(tagger)
-  type <- force(type)
-  if(inherits(control, "nametagger_options")){
+  opts <- control
+  if(inherits(opts, "nametagger_options")){
     features_file <- tempfile(pattern = "nametagger_features_", fileext = ".txt")
-    control <- control[setdiff(names(control), c("file", "type", "tagger"))]
-    control <- unlist(control)
-    writeLines(text = control, con = features_file)
+    opts <- opts[setdiff(names(opts), c("file", "type", "tagger"))]
+    opts <- unlist(opts)
+    writeLines(text = opts, con = features_file)
   }else{
     stopifnot(file.exists(control))
     features_file <- control  
@@ -248,8 +246,6 @@ nametagger <- function(x.train,
   }
   stopifnot(type %in% c("generic", "english", "czech"))
   stopifnot(tagger %in% c("trivial", "external") | grepl(pattern = "morphodita", tagger))
-  type <- type
-  input_type <- tagger
   iterations <- as.integer(iter)
   missing_weight <- as.numeric(weight_missing)
   initial_learning_rate <- as.numeric(lr[1])
@@ -260,7 +256,7 @@ nametagger <- function(x.train,
   out <- utils::capture.output(
     nametag_train(modelname = file, file = file_traindata, 
                   type = type, 
-                  features_file = features_file, input_type = input_type, 
+                  features_file = features_file, input_type = tagger, 
                   stages = stages, 
                   iterations = iterations,
                   missing_weight = missing_weight, 
