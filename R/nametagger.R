@@ -242,7 +242,7 @@ nametagger <- function(x.train,
         file.remove(file_holdout)
       }) 
     }
-  }if(is.null(x.test)){
+  }else if(is.null(x.test)){
     file_holdout <- "" 
   }else{
     file_holdout <- x.test
