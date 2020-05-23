@@ -144,7 +144,8 @@ void nametag_train(std::string modelname,
                    const char* features_file, const std::string input_type = "trivial", int stages = 1, int iterations = 30,
                    double missing_weight = -0.2, double initial_learning_rate = 0.1, double final_learning_rate = 0.01,
                    double gaussian = 0.5, int hidden_layer = 0,
-                   Rcpp::Nullable<Rcpp::CharacterVector> file_holdout = R_NilValue) {
+                   bool has_holdout = false,
+                   const char* heldout_file = "") {
   std::ifstream is (file);
   std::ofstream os;
   os.open (modelname, std::ios::binary);
@@ -166,14 +167,7 @@ void nametag_train(std::string modelname,
   parameters.final_learning_rate = final_learning_rate;
   parameters.gaussian_sigma = gaussian;
   parameters.hidden_layer = hidden_layer;
-  const char* heldout_file;
-  if (file_holdout.isNotNull()) {
-    Rcpp::CharacterVector s(file_holdout);
-    heldout_file = std::string(s[0]).c_str();
-  }else{
-    heldout_file = nullptr;
-  }
-  
+
   // Open features / heldout files
   std::ifstream features(features_file);
   if (!features.is_open()){
@@ -182,12 +176,12 @@ void nametag_train(std::string modelname,
   }
   
   std::ifstream heldout;
-  if (heldout_file) {
+  if (has_holdout) {
     heldout.open(heldout_file);
-    //if (!heldout.is_open()){
-    //  REprintf("Cannot open heldout file %s", heldout_file);
-    //  Rcpp::stop("Cannot open heldout file "); 
-    //}
+    if (!heldout.is_open()){
+      REprintf("Cannot open heldout file %s", heldout_file);
+      Rcpp::stop("Cannot open heldout file "); 
+    }
   } else {
     heldout.setstate(std::ios::failbit);
   }

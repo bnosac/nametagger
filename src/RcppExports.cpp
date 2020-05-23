@@ -42,8 +42,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // nametag_train
-void nametag_train(std::string modelname, std::string file, const std::string type, const char* features_file, const std::string input_type, int stages, int iterations, double missing_weight, double initial_learning_rate, double final_learning_rate, double gaussian, int hidden_layer, Rcpp::Nullable<Rcpp::CharacterVector> file_holdout);
-RcppExport SEXP _nametagger_nametag_train(SEXP modelnameSEXP, SEXP fileSEXP, SEXP typeSEXP, SEXP features_fileSEXP, SEXP input_typeSEXP, SEXP stagesSEXP, SEXP iterationsSEXP, SEXP missing_weightSEXP, SEXP initial_learning_rateSEXP, SEXP final_learning_rateSEXP, SEXP gaussianSEXP, SEXP hidden_layerSEXP, SEXP file_holdoutSEXP) {
+void nametag_train(std::string modelname, std::string file, const std::string type, const char* features_file, const std::string input_type, int stages, int iterations, double missing_weight, double initial_learning_rate, double final_learning_rate, double gaussian, int hidden_layer, bool has_holdout, const char* heldout_file);
+RcppExport SEXP _nametagger_nametag_train(SEXP modelnameSEXP, SEXP fileSEXP, SEXP typeSEXP, SEXP features_fileSEXP, SEXP input_typeSEXP, SEXP stagesSEXP, SEXP iterationsSEXP, SEXP missing_weightSEXP, SEXP initial_learning_rateSEXP, SEXP final_learning_rateSEXP, SEXP gaussianSEXP, SEXP hidden_layerSEXP, SEXP has_holdoutSEXP, SEXP heldout_fileSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type modelname(modelnameSEXP);
@@ -58,8 +58,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type final_learning_rate(final_learning_rateSEXP);
     Rcpp::traits::input_parameter< double >::type gaussian(gaussianSEXP);
     Rcpp::traits::input_parameter< int >::type hidden_layer(hidden_layerSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::CharacterVector> >::type file_holdout(file_holdoutSEXP);
-    nametag_train(modelname, file, type, features_file, input_type, stages, iterations, missing_weight, initial_learning_rate, final_learning_rate, gaussian, hidden_layer, file_holdout);
+    Rcpp::traits::input_parameter< bool >::type has_holdout(has_holdoutSEXP);
+    Rcpp::traits::input_parameter< const char* >::type heldout_file(heldout_fileSEXP);
+    nametag_train(modelname, file, type, features_file, input_type, stages, iterations, missing_weight, initial_learning_rate, final_learning_rate, gaussian, hidden_layer, has_holdout, heldout_file);
     return R_NilValue;
 END_RCPP
 }
@@ -68,7 +69,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nametagger_nametag_info", (DL_FUNC) &_nametagger_nametag_info, 1},
     {"_nametagger_nametag_load_model", (DL_FUNC) &_nametagger_nametag_load_model, 1},
     {"_nametagger_nametag_annotate", (DL_FUNC) &_nametagger_nametag_annotate, 4},
-    {"_nametagger_nametag_train", (DL_FUNC) &_nametagger_nametag_train, 13},
+    {"_nametagger_nametag_train", (DL_FUNC) &_nametagger_nametag_train, 14},
     {NULL, NULL, 0}
 };
 
