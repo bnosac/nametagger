@@ -263,7 +263,7 @@ nametagger <- function(x.train,
                   missing_weight = missing_weight, 
                   initial_learning_rate = initial_learning_rate, final_learning_rate = final_learning_rate,
                   gaussian = gaussian, hidden_layer = hidden_layer, 
-                  has_holdout = !is.null(file_holdout), file_holdout = file_holdout)
+                  has_holdout = !is.null(file_holdout), heldout_file = file_holdout)
     )
   model <- nametagger_load_model(file)
   model$log <- out
