@@ -176,12 +176,18 @@ void nametag_train(std::string modelname,
   
   // Open features / heldout files
   std::ifstream features(features_file);
-  if (!features.is_open()) Rcpp::stop("Cannot open features file");
+  if (!features.is_open()){
+    REprintf("Cannot open features file %s", features_file);
+    Rcpp::stop("Cannot open features file "); 
+  }
   
   std::ifstream heldout;
   if (heldout_file) {
     heldout.open(heldout_file);
-    if (!heldout.is_open()) Rcpp::stop("Cannot open heldout file");
+    if (!heldout.is_open()){
+      REprintf("Cannot open heldout file %s", heldout_file);
+      Rcpp::stop("Cannot open heldout file "); 
+    }
   } else {
     heldout.setstate(std::ios::failbit);
   }

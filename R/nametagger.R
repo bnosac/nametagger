@@ -109,7 +109,9 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
   x <- sapply(x, FUN=function(x){
     paste(x$content, collapse = "\n")
   }, USE.NAMES = FALSE)
-  writeLines(x, file, sep = "\n\n")
+  con <- base::file(file, "w")
+  writeLines(x, con = con, sep = "\n\n")
+  close(con)
   x <- list(data = x, file = file)
   class(x) <- c("nametagger_traindata")
   invisible(x)
@@ -220,7 +222,7 @@ nametagger <- function(x.train,
   }
   
   if(inherits(x.train, "data.frame")){
-    file_traindata <- write_nametagger(x.train)
+    file_traindata <- write_nametagger(x.train, file = tempfile(fileext = ".txt", pattern = sprintf("nametagger_train_%s", gsub("\\.", "", format(Sys.time(), "%Y%m%d%H%M%OS6")))))
     file_traindata <- file_traindata$file
     on.exit(file.remove(file_traindata))
   }else if(file.exists(x.train)){
@@ -229,7 +231,7 @@ nametagger <- function(x.train,
     stopifnot(sprintf("%s not found", x.train))
   }
   if(!is.null(x.test) && inherits(x.test, "data.frame")){
-    file_holdout <- write_nametagger(x.test)
+    file_holdout <- write_nametagger(x.test, file = tempfile(fileext = ".txt", pattern = sprintf("nametagger_test_%s", gsub("\\.", "", format(Sys.time(), "%Y%m%d%H%M%OS6")))))
     file_holdout <- file_holdout$file
     if(inherits(x.train, "data.frame")){
       on.exit({
