@@ -167,6 +167,7 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #'                     control = opts)
 #' }
 #' model
+#' model$stats
 #' plot(model$stats$iteration, model$stats$logprob, type = "b")
 #' plot(model$stats$iteration, model$stats$accuracy_train, type = "b", ylim = c(95, 100))
 #' lines(model$stats$iteration, model$stats$accuracy_test, type = "b", lty = 2, col = "red")
