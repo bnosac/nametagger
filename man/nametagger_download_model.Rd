@@ -6,13 +6,13 @@
 \usage{
 nametagger_download_model(
   language = c("english-conll-140408"),
-  model_dir = getwd()
+  model_dir = tempdir()
 )
 }
 \arguments{
 \item{language}{'english-conll-140408'}
 
-\item{model_dir}{a path where the model will be downloaded to. Defaults to the current working directory}
+\item{model_dir}{a path where the model will be downloaded to.}
 }
 \value{
 an object of class nametagger

@@ -1,3 +1,4 @@
+
 #' @title Load a Named Entity Recognition
 #' @description Load a Named Entity Recognition from your hard disk
 #' @param file character string with the path to the file on disk
@@ -466,7 +467,7 @@ print.nametagger_options <- function(x, ...){
 #' @description Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
 #' More details at \url{http://ufal.mff.cuni.cz/nametag}.
 #' @param language 'english-conll-140408'
-#' @param model_dir a path where the model will be downloaded to. Defaults to the current working directory
+#' @param model_dir a path where the model will be downloaded to.
 #' @return an object of class nametagger 
 #' @references \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3118}
 #' @export
@@ -474,7 +475,7 @@ print.nametagger_options <- function(x, ...){
 #' \donttest{
 #' model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
 #' }
-nametagger_download_model <- function(language = c("english-conll-140408"), model_dir = getwd()){
+nametagger_download_model <- function(language = c("english-conll-140408"), model_dir = tempdir()){
   language <- match.arg(language)
   f <- file.path(tempdir(), "english-conll-140408.zip")
   download.file(url = "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11234/1-3118/english-conll-140408.zip?sequence=1&isAllowed=y",
