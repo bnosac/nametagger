@@ -4,6 +4,8 @@
 #' @export
 #' @return a data.frame with columns doc_id, sentence_id, token, entity
 #' @examples 
+#' \dontshow{if(require(udpipe))\{}
+#' library(udpipe)
 #' r <- "https://raw.githubusercontent.com/EuropeanaNewspapers/ner-corpora/master"
 #' \donttest{
 #' x <- file.path(r, "enp_NL.kb.bio", "enp_NL.kb.bio")
@@ -17,6 +19,7 @@
 #' x <- file.path(r, "enp_DE.lft.bio", "enp_DE.lft.bio")
 #' x <- europeana_read(x)
 #' }
+#' \dontshow{\} # End of main if statement running only if the required packages are installed}
 europeana_read <- function(x){
   label <- basename(x)
   x <- readLines(x, encoding = "UTF-8")

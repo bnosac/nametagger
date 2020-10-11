@@ -50,7 +50,7 @@ nametagger(
 an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
 }
 \description{
-Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag}.
+Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag/1}.
 }
 \examples{
 data(europeananews)
@@ -84,10 +84,11 @@ model$stats
 plot(model$stats$iteration, model$stats$logprob, type = "b")
 plot(model$stats$iteration, model$stats$accuracy_train, type = "b", ylim = c(95, 100))
 lines(model$stats$iteration, model$stats$accuracy_test, type = "b", lty = 2, col = "red")
+\dontshow{if(require(udpipe))\{}
 predict(model, 
         "Ik heet Karel je kan me bereiken op paul@duchanel.be of www.duchanel.be", 
         split = "[[:space:]]+")
-
+\dontshow{\} # End of main if statement running only if the required packages are installed}
 
 features <- system.file(package = "nametagger", 
                         "models", "features_default.txt")

@@ -58,16 +58,49 @@ print.nametagger <- function(x, ...){
 #' }
 predict.nametagger <- function(object, newdata, split = "[[:space:]]+", ...){
   if(is.character(newdata)){
-    newdata <- data.frame(doc_id = seq_along(newdata), 
-                          sentence_id = seq_along(newdata), 
-                          text = newdata, 
-                          stringsAsFactors = FALSE)
-    newdata <- udpipe::strsplit.data.frame(newdata, term = c("text"), group = c("doc_id", "sentence_id"), split = split)
+    # newdata <- data.frame(doc_id = seq_along(newdata), 
+    #                       sentence_id = seq_along(newdata), 
+    #                       text = newdata, 
+    #                       stringsAsFactors = FALSE)
+    # newdata <- udpipe::strsplit.data.frame(newdata, term = c("text"), group = c("doc_id", "sentence_id"), split = split)
+    newdata <- splitter(newdata, split = split)
   }
   stopifnot(is.data.frame(newdata))
   stopifnot(all(c("doc_id", "sentence_id", "text") %in% colnames(newdata)))
   nametag_annotate(object$model, newdata$text, newdata$doc_id, newdata$sentence_id)
 }
+
+splitter <- function(x, split){
+  unlist_tokens <- function(x){
+    stopifnot(is.list(x))
+    if(is.null(names(x))){
+      doc_id <- rep(x = as.character(seq_along(x)), times = sapply(x, length))
+    }else{
+      doc_id <- rep(x = names(x), times = sapply(x, length)) 
+    }
+    sentence_id <- rep(x = seq_along(x), times = sapply(x, length))
+    token  <- unlist(x, use.names = FALSE, recursive = FALSE)
+    if(length(token) == 0){
+      x <- data.frame(doc_id = character(), 
+                      sentence_id = integer(),
+                      text = character(), 
+                      stringsAsFactors = FALSE)
+    }else{
+      x <- data.frame(doc_id = doc_id, 
+                      sentence_id = sentence_id,
+                      text = token, 
+                      stringsAsFactors = FALSE)  
+    }
+    x
+  }
+  tokens <- strsplit(x, split = split)
+  tokens <- unlist_tokens(tokens)
+  tokens <- tokens[!is.na(tokens$text), ]
+  tokens <- tokens[nchar(tokens$text) > 0, ]
+  rownames(tokens) <- NULL
+  tokens
+}
+
 
 #' @title Save a tokenised dataset as nametagger train data
 #' @description Save a tokenised dataset as nametagger train data
@@ -122,7 +155,7 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 
 
 #' @title Train a Named Entity Recognition Model using NameTag
-#' @description Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag}.
+#' @description Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag/1}.
 #' @param x.train a file with training data or a data.frame which can be passed on to \code{\link{write_nametagger}}
 #' @param x.test optionally, a file with test data or a data.frame which can be passed on to \code{\link{write_nametagger}}
 #' @param type either one of 'generic', 'english' or 'czech'
@@ -172,10 +205,11 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 #' plot(model$stats$iteration, model$stats$logprob, type = "b")
 #' plot(model$stats$iteration, model$stats$accuracy_train, type = "b", ylim = c(95, 100))
 #' lines(model$stats$iteration, model$stats$accuracy_test, type = "b", lty = 2, col = "red")
+#' \dontshow{if(require(udpipe))\{}
 #' predict(model, 
 #'         "Ik heet Karel je kan me bereiken op paul@duchanel.be of www.duchanel.be", 
 #'         split = "[[:space:]]+")
-#' 
+#' \dontshow{\} # End of main if statement running only if the required packages are installed}
 #' 
 #' features <- system.file(package = "nametagger", 
 #'                         "models", "features_default.txt")
@@ -307,9 +341,9 @@ parse_training_log <- function(x){
 #' }
 #' If you specifiy the argument without specifying \code{use}, it will by default use it.
 #' For arguments brown, gazetteers and gazetteers_enhanced, see the examples and 
-#' the documentation at \url{http://ufal.mff.cuni.cz/nametag}.
+#' the documentation at \url{http://ufal.mff.cuni.cz/nametag/1}.
 #' @param file path to the filename where the model will be saved
-#' @param type either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{http://ufal.mff.cuni.cz/nametag}.
+#' @param type either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{http://ufal.mff.cuni.cz/nametag/1}.
 #' @param tagger either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)
 #' @param token use forms as features
 #' @param token_capitalised use capitalization of form as features
@@ -465,7 +499,7 @@ print.nametagger_options <- function(x, ...){
 
 #' @title Download a Nametag model
 #' @description Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
-#' More details at \url{http://ufal.mff.cuni.cz/nametag}.
+#' More details at \url{http://ufal.mff.cuni.cz/nametag/1}.
 #' @param language 'english-conll-140408'
 #' @param model_dir a path where the model will be downloaded to.
 #' @return an object of class nametagger 
