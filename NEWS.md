@@ -1,3 +1,8 @@
+## CHANGES IN nametagger VERSION 0.1.2
+
+- use snprintf instead of sprintf to handle the R CMD check deprecating note on M1mac
+- added example in README
+
 ## CHANGES IN nametagger VERSION 0.1.1
 
 - Move udpipe to Suggests instead of Imports, remove crfsuite from Suggests
