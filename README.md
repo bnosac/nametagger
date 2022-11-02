@@ -15,13 +15,12 @@ This repository contains an R package which wraps the NameTag C++ library (https
 ```
 library(nametagger)
 model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
-x <- data.frame(doc_id      = c(1, 1, 2),
-                sentence_id = c(1, 2, 1),
-                text        = c("I\nlive\nin\nNew\nYork\nand\nI\nwork\nfor\nApple\nInc.", 
-                                "Why\ndon't\nyou\ncome\nvisit\nme", 
-                                "Good\nnews\nfrom\nAmazon\nas\nJohn\nworks\nthere\n."))
-entities <- predict(model, x)                          
-entities
+x     <- data.frame(doc_id      = c(1, 1, 2),
+                    sentence_id = c(1, 2, 1),
+                    text        = c("I\nlive\nin\nNew\nYork\nand\nI\nwork\nfor\nApple\nInc.", 
+                                    "Why\ndon't\nyou\ncome\nvisit\nme", 
+                                    "Good\nnews\nfrom\nAmazon\nas\nJohn\nworks\nthere\n."))
+predict(model, x)                          
 
  doc_id sentence_id term_id   term entity
       1           1       1      I      O
