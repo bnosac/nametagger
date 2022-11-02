@@ -155,7 +155,7 @@ write_nametagger <- function(x, file = tempfile(fileext = ".txt", pattern = "nam
 
 
 #' @title Train a Named Entity Recognition Model using NameTag
-#' @description Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag/1}.
+#' @description Train a Named Entity Recognition Model using NameTag. Details at \url{https://ufal.mff.cuni.cz/nametag/1}.
 #' @param x.train a file with training data or a data.frame which can be passed on to \code{\link{write_nametagger}}
 #' @param x.test optionally, a file with test data or a data.frame which can be passed on to \code{\link{write_nametagger}}
 #' @param type either one of 'generic', 'english' or 'czech'
@@ -341,9 +341,9 @@ parse_training_log <- function(x){
 #' }
 #' If you specifiy the argument without specifying \code{use}, it will by default use it.
 #' For arguments brown, gazetteers and gazetteers_enhanced, see the examples and 
-#' the documentation at \url{http://ufal.mff.cuni.cz/nametag/1}.
+#' the documentation at \url{https://ufal.mff.cuni.cz/nametag/1}.
 #' @param file path to the filename where the model will be saved
-#' @param type either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{http://ufal.mff.cuni.cz/nametag/1}.
+#' @param type either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{https://ufal.mff.cuni.cz/nametag/1}.
 #' @param tagger either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)
 #' @param token use forms as features
 #' @param token_capitalised use capitalization of form as features
@@ -499,7 +499,7 @@ print.nametagger_options <- function(x, ...){
 
 #' @title Download a Nametag model
 #' @description Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
-#' More details at \url{http://ufal.mff.cuni.cz/nametag/1}.
+#' More details at \url{https://ufal.mff.cuni.cz/nametag/1}.
 #' @param language 'english-conll-140408'
 #' @param model_dir a path where the model will be downloaded to.
 #' @return an object of class nametagger 

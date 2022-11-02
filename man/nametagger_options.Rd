@@ -28,7 +28,7 @@ nametagger_options(
 \arguments{
 \item{file}{path to the filename where the model will be saved}
 
-\item{type}{either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{http://ufal.mff.cuni.cz/nametag/1}.}
+\item{type}{either one of 'generic', 'english' or 'czech'. See the documentation at the documentation at \url{https://ufal.mff.cuni.cz/nametag/1}.}
 
 \item{tagger}{either one of 'trivial' (no lemma used in the training data), 'external' (you provided your own lemma in the training data)}
 
@@ -82,7 +82,7 @@ Each argument should be a list with elements \code{use} and \code{window}. \cr
 }
 If you specifiy the argument without specifying \code{use}, it will by default use it.
 For arguments brown, gazetteers and gazetteers_enhanced, see the examples and 
-the documentation at \url{http://ufal.mff.cuni.cz/nametag/1}.
+the documentation at \url{https://ufal.mff.cuni.cz/nametag/1}.
 }
 \examples{
 opts <- nametagger_options(token = list(window = 2))

@@ -19,7 +19,7 @@ an object of class nametagger
 }
 \description{
 Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
-More details at \url{http://ufal.mff.cuni.cz/nametag/1}.
+More details at \url{https://ufal.mff.cuni.cz/nametag/1}.
 }
 \examples{
 \donttest{

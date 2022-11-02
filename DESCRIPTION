@@ -10,7 +10,7 @@ Authors@R: c(
     person('Jana Straková', role = c('ctb', 'cph'), email = 'strakova@ufal.mff.cuni.cz'))
 Maintainer: Jan Wijffels <jwijffels@bnosac.be>
 Description: Wraps the 'nametag' library <https://github.com/ufal/nametag>, allowing users to find and extract entities (names, persons, locations, addresses, ...) in raw text and build your own entity recognition models.
-    Based on a maximum entropy Markov model which is described in Strakova J., Straka M. and Hajic J. (2013) <http://ufal.mff.cuni.cz/~straka/papers/2013-tsd_ner.pdf>.
+    Based on a maximum entropy Markov model which is described in Strakova J., Straka M. and Hajic J. (2013) <https://ufal.mff.cuni.cz/~straka/papers/2013-tsd_ner.pdf>.
 URL: https://github.com/bnosac/nametagger
 License: MPL-2.0
 Encoding: UTF-8

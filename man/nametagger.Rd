@@ -50,7 +50,7 @@ nametagger(
 an object of class \code{nametagger} containing an extra list element called stats containing information on the evolution of the log probability and the accuracy on the training and optionally the test set
 }
 \description{
-Train a Named Entity Recognition Model using NameTag. Details at \url{http://ufal.mff.cuni.cz/nametag/1}.
+Train a Named Entity Recognition Model using NameTag. Details at \url{https://ufal.mff.cuni.cz/nametag/1}.
 }
 \examples{
 data(europeananews)
