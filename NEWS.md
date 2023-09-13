@@ -1,3 +1,9 @@
+## CHANGES IN nametagger VERSION 0.1.3
+
+- Add explicit initialization to silence false positive valgrind report in compressor_save.cpp
+- Drop C++11 specification in Makevars
+- Remove use of std::iterator by incorporating fixes of https://github.com/ufal/nametag/commit/2aa1d1de78d2f562c0770423f94cc7d7e1347ff7 in utf8.h and utf16.h
+
 ## CHANGES IN nametagger VERSION 0.1.2
 
 - use snprintf instead of sprintf to handle the R CMD check deprecating note on M1mac
