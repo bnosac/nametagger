@@ -4,10 +4,10 @@
 \alias{nametagger_download_model}
 \title{Download a Nametag model}
 \usage{
-nametagger_download_model(language, model_dir = tempdir())
+nametagger_download_model(language = "english", model_dir = tempdir())
 }
 \arguments{
-\item{language}{Language models available, 'english' or 'czech'}
+\item{language}{Language model to download, 'english' (default) or 'czech'}
 
 \item{model_dir}{a path where the model will be downloaded to.}
 }
