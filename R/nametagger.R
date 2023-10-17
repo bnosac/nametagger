@@ -517,21 +517,21 @@ nametagger_download_model <- function(language = "english", model_dir = tempdir(
   
   language <- match.arg(language, choices = c("english-conll-140408", "czech-cnec-140304"))
   
-  f <- file.path(tempdir(), paste0(language, ".zip"))
+  f <- file.path(tempdir(), paste(language, ".zip", sep = ""))
   switch (language,
     "english-conll-140408" = {
       download.file(url = english_conll_url, destfile = f, mode = "wb")
-      ner_file_path <- paste0(language, "/", language, ".ner")
+      ner_file_path <- paste(language, "/", language, ".ner", sep = "")
       }, 
     "czech-cnec-140304" = {
       download.file(url = czech_cnec_url, destfile = f, mode = "wb")
-      ner_file_path <- paste0(language, "/czech-cnec2.0-140304.ner")
+      ner_file_path <- paste(language, "/czech-cnec2.0-140304.ner", sep = "")
     }
   )
   
   f <- utils::unzip(f, exdir = tempdir(), files = ner_file_path)
   from <- file.path(tempdir(), ner_file_path)
-  to <- file.path(model_dir, paste0(language, ".ner"))
+  to <- file.path(model_dir, paste(language, ".ner", sep = ""))
   file.copy(from, to = to, overwrite = TRUE)
   nametagger_load_model(to)
 }
