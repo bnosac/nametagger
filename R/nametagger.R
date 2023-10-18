@@ -530,8 +530,7 @@ nametagger_download_model <- function(language = c("english-conll-140408", "czec
     }
   )
   
-  f <- utils::unzip(f, exdir = tempdir(), files = ner_file_path)
-  from <- file.path(tempdir(), ner_file_path)
+  from <- utils::unzip(f, exdir = tempdir(), files = ner_file_path)
   to <- file.path(model_dir, paste(language, ".ner", sep = ""))
   file.copy(from, to = to, overwrite = TRUE)
   nametagger_load_model(to)
