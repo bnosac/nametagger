@@ -15,8 +15,7 @@ nametagger(
   control = nametagger_options(token = list(window = 2)),
   type = if (inherits(control, "nametagger_options")) control$type else "generic",
   tagger = if (inherits(control, "nametagger_options")) control$tagger else "trivial",
-  file = if (inherits(control, "nametagger_options")) control$file else
-    "nametagger.ner"
+  file = if (inherits(control, "nametagger_options")) control$file else "nametagger.ner"
 )
 }
 \arguments{

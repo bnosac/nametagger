@@ -1,3 +1,7 @@
+## CHANGES IN nametagger VERSION 0.1.4
+
+- nametagger_download_model now allows to download a model for Czech: czech-cnec-140304
+
 ## CHANGES IN nametagger VERSION 0.1.3
 
 - Add explicit initialization to silence false positive valgrind report in compressor_save.cpp
