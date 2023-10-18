@@ -495,37 +495,38 @@ print.nametagger_options <- function(x, ...){
   cat(x, sep = "\n")
 }
 
-english_conll_url <- "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11234/1-3118/english-conll-140408.zip?sequence=1&isAllowed=y"
-czech_cnec_url <- "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11858/00-097C-0000-0023-7D42-8/czech-cnec-140304.zip?sequence=1&isAllowed=y"
 
 #' @title Download a Nametag model
 #' @description Download a Nametag model. Note that models have licence CC-BY-SA-NC. 
 #' More details at \url{https://ufal.mff.cuni.cz/nametag/1}.
-#' @param language Language model to download, 'english' (default) or 'czech'
+#' @param language Language model to download, 'english-conll-140408' (default) or 'czech-cnec-140304'
 #' @param model_dir a path where the model will be downloaded to.
 #' @return an object of class nametagger 
 #' @references 
 #'  \url{http://ufal.mff.cuni.cz/nametag/users-manual}
 #'  \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3118}
-#'  \url{https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11858/00-097C-0000-0023-7D42-8/}
+#'  \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0023-7D42-8}
 #' @export
 #' @examples 
 #' \donttest{
 #' model <- nametagger_download_model("english-conll-140408", model_dir = tempdir())
+#' model <- nametagger_download_model("czech-cnec-140304", model_dir = tempdir())
 #' }
-nametagger_download_model <- function(language = "english", model_dir = tempdir()){
+nametagger_download_model <- function(language = c("english-conll-140408", "czech-cnec-140304"), model_dir = tempdir()){
   
-  language <- match.arg(language, choices = c("english-conll-140408", "czech-cnec-140304"))
+  language <- match.arg(language)
   
   f <- file.path(tempdir(), paste(language, ".zip", sep = ""))
   switch (language,
     "english-conll-140408" = {
-      download.file(url = english_conll_url, destfile = f, mode = "wb")
-      ner_file_path <- paste(language, "/", language, ".ner", sep = "")
+      url <- "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11234/1-3118/english-conll-140408.zip?sequence=1&isAllowed=y"
+      download.file(url = url, destfile = f, mode = "wb")
+      ner_file_path <- "english-conll-140408/english-conll-140408.ner"
       }, 
     "czech-cnec-140304" = {
-      download.file(url = czech_cnec_url, destfile = f, mode = "wb")
-      ner_file_path <- paste(language, "/czech-cnec2.0-140304.ner", sep = "")
+      url <- "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11858/00-097C-0000-0023-7D42-8/czech-cnec-140304.zip?sequence=1&isAllowed=y"
+      download.file(url = url, destfile = f, mode = "wb")
+      ner_file_path <- "czech-cnec-140304/czech-cnec2.0-140304.ner"
     }
   )
   
