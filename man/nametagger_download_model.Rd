@@ -28,7 +28,7 @@ model <- nametagger_download_model("czech-cnec-140304", model_dir = tempdir())
 }
 }
 \references{
-\url{http://ufal.mff.cuni.cz/nametag/users-manual}
+\url{https://ufal.mff.cuni.cz/nametag/1/users-manual}
  \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3118}
  \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0023-7D42-8}
 }
