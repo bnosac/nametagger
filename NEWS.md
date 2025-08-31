@@ -2,6 +2,7 @@
 
 - avoid warning: overlapping comparisons always evaluate to true in parse_int 
    - replacing: !(str.str[0] >= '0' || str.str[0] <= '9') with (str.str[0] < '0' || str.str[0] > '9')
+- changed url in nametagger_donwload_model to https://ufal.mff.cuni.cz/nametag/1/users-manual
 
 ## CHANGES IN nametagger VERSION 0.1.4
 

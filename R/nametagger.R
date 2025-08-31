@@ -503,7 +503,7 @@ print.nametagger_options <- function(x, ...){
 #' @param model_dir a path where the model will be downloaded to.
 #' @return an object of class nametagger 
 #' @references 
-#'  \url{http://ufal.mff.cuni.cz/nametag/users-manual}
+#'  \url{https://ufal.mff.cuni.cz/nametag/1/users-manual}
 #'  \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3118}
 #'  \url{https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0023-7D42-8}
 #' @export
