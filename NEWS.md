@@ -1,3 +1,8 @@
+## CHANGES IN nametagger VERSION 0.1.5
+
+- avoid warning: overlapping comparisons always evaluate to true in parse_int 
+   - replacing: !(str.str[0] >= '0' || str.str[0] <= '9') with (str.str[0] < '0' || str.str[0] > '9')
+
 ## CHANGES IN nametagger VERSION 0.1.4
 
 - nametagger_download_model now allows to download a model for Czech: czech-cnec-140304
