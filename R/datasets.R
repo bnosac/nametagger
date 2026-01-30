@@ -52,7 +52,7 @@ europeana_read <- function(x){
 #' }
 #'     
 #' @references 
-#'  Europeana Newspapers project, (2014), KB Europeana Newspapers NER Dataset. KB Lab: The Hague. \url{http://lab.kb.nl/dataset/europeana-newspapers-ner}
+#'  Europeana Newspapers project, (2014), KB Europeana Newspapers NER Dataset. KB Lab: The Hague. \url{https://lab.kb.nl/dataset/europeana-newspapers-ner}
 #' @docType data
 #' @examples 
 #' data(europeananews)
