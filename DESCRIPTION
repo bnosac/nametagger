@@ -3,11 +3,11 @@ Type: Package
 Title: Named Entity Recognition in Texts using 'NameTag'
 Version: 0.1.6
 Authors@R: c(
-    person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jwijffels@bnosac.be'), 
-    person('BNOSAC', role = 'cph'), 
+    person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jwijffels@bnosac.be', comment = 'R wrapper'), 
+    person('BNOSAC', role = 'cph', comment = 'R wrapper'), 
     person("Institute of Formal and Applied Linguistics, Faculty of Mathematics and Physics, Charles University in Prague, Czech Republic", role = 'cph'), 
-    person('Milan Straka', role = c('ctb', 'cph'), email = 'straka@ufal.mff.cuni.cz'), 
-    person('Jana Straková', role = c('ctb', 'cph'), email = 'strakova@ufal.mff.cuni.cz'))
+    person('Milan Straka', role = c('ctb', 'cph'), email = 'straka@ufal.mff.cuni.cz', comment = "src/nametag"), 
+    person('Jana Straková', role = c('ctb', 'cph'), email = 'strakova@ufal.mff.cuni.cz', comment = "src/nametag"))
 Maintainer: Jan Wijffels <jwijffels@bnosac.be>
 Description: Wraps the 'nametag' library <https://github.com/ufal/nametag>, allowing users to find and extract entities (names, persons, locations, addresses, ...) in raw text and build your own entity recognition models.
     Based on a maximum entropy Markov model which is described in Strakova J., Straka M. and Hajic J. (2013) <https://ufal.mff.cuni.cz/~straka/papers/2013-tsd_ner.pdf>.

@@ -1,6 +1,7 @@
 ## CHANGES IN nametagger VERSION 0.1.6
 
 - Fix on the declaration of persistent_unordered_map for C++20
+- Add comment section in Authors@R and put aut for nametag C++ part
 
 ## CHANGES IN nametagger VERSION 0.1.5
 
