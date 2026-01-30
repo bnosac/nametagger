@@ -1,4 +1,6 @@
 PKG_CPPFLAGS = -DSTRICT_R_HEADERS -I./nametag/src
+CXX = g++ -std=gnu++20
+CXX_STD = CXX20
 
 SOURCES_NAMETAG = nametag/src/bilou/bilou_probabilities.cpp \
           nametag/src/bilou/ner_sentence.cpp \
