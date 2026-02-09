@@ -56,7 +56,7 @@ void network_classifier::load_matrix(binary_decoder& data, vector<vector<T>>& m)
   for (auto&& row : m) {
     row.resize(data.next_2B());
     if (!row.empty())
-      memcpy((unsigned char*) row.data(), data.next<T>(row.size()), row.size() * sizeof(T));
+      memcpy((unsigned char*) row.data(), (const void*)data.next<T>(row.size()), row.size() * sizeof(T));
   }
 }
 

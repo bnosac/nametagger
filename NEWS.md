@@ -1,3 +1,7 @@
+## CHANGES IN nametagger VERSION 0.1.7
+
+- Fix load of misaligned address and UBSan messages reported by CRAN
+
 ## CHANGES IN nametagger VERSION 0.1.6
 
 - Fix on the declaration of persistent_unordered_map for C++20

@@ -1,7 +1,7 @@
 Package: nametagger
 Type: Package
 Title: Named Entity Recognition in Texts using 'NameTag'
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(
     person('Jan', 'Wijffels', role = c('aut', 'cre', 'cph'), email = 'jwijffels@bnosac.be', comment = 'R wrapper'), 
     person('BNOSAC', role = 'cph', comment = 'R wrapper'), 
