@@ -60,12 +60,12 @@ inline T unaligned_load_inc(const P*& ptr) {
 
 template<class T, class P>
 inline void unaligned_store(P* ptr, T value) {
-  memcpy((const void*)ptr, &value, sizeof(T));
+  memcpy((void*)ptr, &value, sizeof(T));
 }
 
 template<class T, class P>
 inline void unaligned_store_inc(P*& ptr, T value) {
-  memcpy((const void*)ptr, &value, sizeof(T));
+  memcpy((void*)ptr, &value, sizeof(T));
   ((char*&)ptr) += sizeof(T);
 }
 
