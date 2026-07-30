@@ -1,3 +1,7 @@
+## CHANGES IN nametagger VERSION 0.1.8
+
+- nametagger_download_model: change paths of english-conll-140408 / czech-cnec-140304 as lindat.mff.cuni.cz has changed
+
 ## CHANGES IN nametagger VERSION 0.1.7
 
 - Fix load of misaligned address and UBSan messages reported by CRAN

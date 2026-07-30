@@ -520,11 +520,13 @@ nametagger_download_model <- function(language = c("english-conll-140408", "czec
   switch (language,
     "english-conll-140408" = {
       url <- "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11234/1-3118/english-conll-140408.zip?sequence=1&isAllowed=y"
+      url <- "https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/handle/11234/1-3118/english-conll-140408.zip"
       download.file(url = url, destfile = f, mode = "wb")
       ner_file_path <- "english-conll-140408/english-conll-140408.ner"
       }, 
     "czech-cnec-140304" = {
       url <- "https://lindat.mff.cuni.cz/repository/xmlui/bitstream/handle/11858/00-097C-0000-0023-7D42-8/czech-cnec-140304.zip?sequence=1&isAllowed=y"
+      url <- "https://lindat.mff.cuni.cz/repository/server/api/core/bitstreams/handle/11858/00-097C-0000-0023-7D42-8/czech-cnec-140304.zip"
       download.file(url = url, destfile = f, mode = "wb")
       ner_file_path <- "czech-cnec-140304/czech-cnec2.0-140304.ner"
     }
